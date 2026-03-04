@@ -36,27 +36,34 @@ class ContributionController extends Controller
         ], 201);
     }
 
-    public function verify(Request $request, Contribution $contribution)
+    public function verify(Contribution $contribution)
     {
-        if ($contribution->status === 'paid') {
-            return response()->json(['message' => 'Contribution already verified.'], 200);
+        $reference = request('transaction_reference');
+        
+        if ($contribution->transaction_reference !== $reference) {
+            return response()->json(['message' => 'Invalid reference'], 422);
         }
 
-        $gateway = $request->input('gateway', 'paystack');
-        $isVerified = $this->paymentService->verifyReference($contribution->transaction_reference, $gateway);
+        $paymentService = new PaymentService();
+        $isVerified = $paymentService->verifyReference($reference);
 
         if ($isVerified) {
-            $contribution->update(['status' => 'paid']);
-            
-            // Increment the item balance only now
+            $contribution->update(['status' => 'verified']);
             $contribution->registryItem->increment('amount_raised', $contribution->amount);
-
-            return response()->json([
-                'message' => 'Payment verified successfully.',
-                'contribution' => $contribution
-            ]);
+            return response()->json(['message' => 'Verification successful', 'contribution' => $contribution->load('thankYouVideo')]);
         }
 
-        return response()->json(['message' => 'Payment verification failed.'], 400);
+        return response()->json(['message' => 'Verification failed'], 400);
+    }
+
+    public function search(Request $request)
+    {
+        $contribution = Contribution::where('transaction_reference', $request->transaction_reference)->first();
+        
+        if (!$contribution) {
+            return response()->json(['message' => 'Contribution not found'], 404);
+        }
+
+        return response()->json($contribution);
     }
 }

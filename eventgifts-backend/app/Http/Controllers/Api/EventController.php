@@ -41,6 +41,11 @@ class EventController extends Controller
         return response()->json($event->load('registryItems'));
     }
 
+    public function publicShow(Event $event)
+    {
+        return response()->json($event->load('registryItems'));
+    }
+
     public function update(Request $request, Event $event)
     {
         if ($event->host_id !== Auth::id()) {

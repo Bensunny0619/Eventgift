@@ -24,9 +24,12 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 // Guest and Public Routes
-Route::post('/registry-items/{item}/contribute', [ContributionController::class, 'store']);
+Route::post('/contributions', [ContributionController::class, 'store']);
+Route::post('/contributions/search', [ContributionController::class, 'search']);
 Route::post('/contributions/{contribution}/verify', [ContributionController::class, 'verify']);
 Route::get('/contributions/{contribution}/thank-you', [ThankYouVideoController::class, 'show']);
+
+Route::get('/events/{event}/public', [EventController::class, 'publicShow']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
