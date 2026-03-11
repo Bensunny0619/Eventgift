@@ -5,6 +5,7 @@ import Sidebar from './components/Sidebar';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import Settings from './pages/Settings';
 import Dashboard from './pages/Dashboard';
 import Analytics from './pages/Analytics';
 import CreateEvent from './pages/CreateEvent';
@@ -75,6 +76,7 @@ function App() {
             <Route path="/events/create" element={<CreateEvent />} />
             <Route path="/events/:id" element={<EventDetails />} />
             <Route path="/registry/:id" element={<PublicEvent />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="/explore" element={<div className="p-20 text-center font-serif text-3xl">Explore Events Placeholder</div>} />
           </Routes>
         </main>

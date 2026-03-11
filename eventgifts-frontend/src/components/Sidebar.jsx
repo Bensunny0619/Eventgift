@@ -33,7 +33,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 onClick={() => setIsOpen(false)}
             />
 
-            <aside className={`fixed left-0 top-0 h-screen w-72 bg-white dark:bg-exquisite-midnight border-r border-slate-100 dark:border-white/5 z-[60] flex flex-col pt-32 pb-8 px-6 transition-transform duration-300 ease-in-out transform ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <aside className={`fixed left-0 top-0 h-screen w-72 bg-white dark:bg-exquisite-midnight border-r border-slate-100 dark:border-white/5 z-[60] flex flex-col pt-32 pb-8 px-6 transition-transform duration-300 ease-in-out transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} overflow-y-auto custom-sidebar-scroll`}>
                 {/* Brand in Sidebar */}
                 <div className="absolute top-8 left-8 flex items-center space-x-3 group">
                     <div className="h-12 w-12 gold-gradient rounded-2xl flex items-center justify-center shadow-lg shadow-exquisite-gold/20 transform group-hover:rotate-12 transition-transform duration-500">
