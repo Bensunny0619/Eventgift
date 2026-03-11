@@ -41,7 +41,7 @@ const Dashboard = () => {
         <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
 
             {/* Top Metrics Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 mt-12 gap-6 sm:gap-8">
                 <StatCard
                     label="Active Events"
                     value={events.length < 10 ? `0${events.length}` : events.length}
@@ -53,7 +53,7 @@ const Dashboard = () => {
                     value="1,248"
                     trend="+4.2%"
                     icon={Users}
-                    color="dark"
+                // color="dark"
                 />
                 <StatCard
                     label="Gift Valuations"
@@ -141,20 +141,20 @@ const Dashboard = () => {
                                             </div>
                                         </div>
 
-                                            <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4">
-                                                <Link
-                                                    to={`/events/${event.id}`}
-                                                    className="w-full sm:flex-grow py-4 border border-slate-200 dark:border-white/10 rounded-2xl text-center font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 transition-all uppercase text-[10px] tracking-[0.2em]"
-                                                >
-                                                    Guest List
-                                                </Link>
-                                                <Link
-                                                    to={`/events/${event.id}/edit`}
-                                                    className="w-full sm:flex-grow py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl text-center font-bold hover:scale-105 transition-all uppercase text-[10px] tracking-[0.2em]"
-                                                >
-                                                    Edit Details
-                                                </Link>
-                                            </div>
+                                        <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                                            <Link
+                                                to={`/events/${event.id}`}
+                                                className="w-full sm:flex-grow py-4 border border-slate-200 dark:border-white/10 rounded-2xl text-center font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 transition-all uppercase text-[10px] tracking-[0.2em]"
+                                            >
+                                                Guest List
+                                            </Link>
+                                            <Link
+                                                to={`/events/${event.id}/edit`}
+                                                className="w-full sm:flex-grow py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl text-center font-bold hover:scale-105 transition-all uppercase text-[10px] tracking-[0.2em]"
+                                            >
+                                                Edit Details
+                                            </Link>
+                                        </div>
                                     </div>
                                 </div>
                             ))
