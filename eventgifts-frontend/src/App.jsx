@@ -8,6 +8,7 @@ import RegisterPage from './pages/RegisterPage';
 import Dashboard from './pages/Dashboard';
 import CreateEvent from './pages/CreateEvent';
 import EventDetails from './pages/EventDetails';
+import Events from './pages/Events';
 import PublicEvent from './pages/PublicEvent';
 import { useAuth } from './context/AuthContext';
 
@@ -64,6 +65,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/events" element={<Events />} />
             <Route path="/events/create" element={<CreateEvent />} />
             <Route path="/events/:id" element={<EventDetails />} />
             <Route path="/registry/:id" element={<PublicEvent />} />
