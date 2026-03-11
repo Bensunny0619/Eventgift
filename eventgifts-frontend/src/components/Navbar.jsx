@@ -14,16 +14,15 @@ import {
     Diamond
 } from 'lucide-react';
 
-const Navbar = () => {
+const Navbar = ({ toggleSidebar, isDashboard, isSidebarOpen }) => {
     const { user, logout } = useAuth();
     const { isDarkMode, toggleTheme } = useTheme();
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const navigate = useNavigate();
 
     return (
-        <header className={`fixed top-0 right-0 left-0 z-40 transition-all duration-300 ${user ? 'lg:left-72' : ''}`}>
-            <div className="bg-white/80 dark:bg-exquisite-midnight/80 backdrop-blur-md border-b border-slate-100 dark:border-white/5 py-6 px-10">
-                <div className="max-w-[1600px] mx-auto flex items-center justify-between">
+        <header className={`fixed top-0 right-0 left-0 z-40 transition-all duration-300 ${isDashboard && isSidebarOpen ? 'lg:left-72' : ''}`}>
+            <div className="bg-white/80 dark:bg-exquisite-midnight/80 backdrop-blur-md border-b border-slate-100 dark:border-white/5 py-4 sm:py-6 px-4 sm:px-10">
+                <div className="max-w-[1600px] mx-auto flex items-center justify-between gap-4">
 
                     {/* Logo / Title Area */}
                     <div className="flex items-center space-x-8">
@@ -37,7 +36,7 @@ const Navbar = () => {
                         )}
 
                         {user && (
-                            <h1 className="text-3xl font-serif text-slate-900 dark:text-white">
+                            <h1 className="text-xl sm:text-3xl font-serif text-slate-900 dark:text-white truncate max-w-[150px] sm:max-w-none">
                                 Welcome, <span className="text-exquisite-gold">{user.name.split(' ')[0]}</span>
                             </h1>
                         )}
@@ -70,12 +69,12 @@ const Navbar = () => {
 
                         {user ? (
                             <div className="flex items-center space-x-8">
-                                <div className="flex items-center space-x-4 border-r border-slate-200 dark:border-white/10 pr-8">
+                                <div className="flex items-center space-x-2 sm:space-x-4 border-r border-slate-200 dark:border-white/10 pr-4 sm:pr-8">
                                     <button className="relative p-2 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
-                                        <Bell className="h-6 w-6" />
-                                        <span className="absolute top-1 right-1 h-2.5 w-2.5 bg-exquisite-gold border-2 border-white dark:border-exquisite-midnight rounded-full"></span>
+                                        <Bell className="h-5 w-5 sm:h-6 sm:w-6" />
+                                        <span className="absolute top-1 right-1 h-2 w-2 sm:h-2.5 sm:w-2.5 bg-exquisite-gold border-2 border-white dark:border-exquisite-midnight rounded-full"></span>
                                     </button>
-                                    <button className="p-2 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
+                                    <button className="hidden sm:block p-2 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
                                         <MessageSquare className="h-6 w-6" />
                                     </button>
                                 </div>
@@ -99,12 +98,14 @@ const Navbar = () => {
                             </div>
                         )}
 
-                        <button
-                            className="lg:hidden p-2 text-slate-600 dark:text-slate-400"
-                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        >
-                            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                        </button>
+                        {isDashboard && (
+                            <button
+                                className="p-2 text-slate-600 dark:text-slate-400 hover:text-exquisite-gold transition-colors"
+                                onClick={toggleSidebar}
+                            >
+                                {isSidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

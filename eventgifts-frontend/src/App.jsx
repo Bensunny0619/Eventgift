@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
@@ -13,6 +14,27 @@ import { useAuth } from './context/AuthContext';
 function App() {
   const { user } = useAuth();
   const location = useLocation();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth > 1024);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024) {
+        setIsSidebarOpen(false);
+      } else {
+        setIsSidebarOpen(true);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Close sidebar on small screens only when route changes
+  useEffect(() => {
+    if (window.innerWidth < 1024) {
+      setIsSidebarOpen(false);
+    }
+  }, [location.pathname]);
 
   // Dashboard routes should show the sidebar
   const isDashboardRoute = user && (
@@ -25,12 +47,18 @@ function App() {
   );
 
   return (
-    <div className="min-h-screen bg-exquisite-cream dark:bg-exquisite-midnight transition-colors duration-300">
-      {isDashboardRoute && <Sidebar />}
+    <div className="min-h-screen bg-exquisite-cream dark:bg-exquisite-midnight transition-colors duration-300 overflow-x-hidden">
+      {user && isDashboardRoute && (
+        <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+      )}
 
-      <div className={`transition-all duration-300 ${isDashboardRoute ? 'lg:pl-72' : ''}`}>
-        <Navbar />
-        <main className={`pt-24 ${isDashboardRoute ? 'px-10 pb-10' : ''}`}>
+      <div className={`transition-all duration-300 ${isDashboardRoute && isSidebarOpen ? 'lg:pl-72' : ''}`}>
+        <Navbar 
+          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} 
+          isDashboard={isDashboardRoute} 
+          isSidebarOpen={isSidebarOpen} 
+        />
+        <main className={`pt-24 ${isDashboardRoute ? 'px-4 sm:px-10 pb-10' : ''}`}>
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />

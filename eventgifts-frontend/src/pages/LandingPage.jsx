@@ -14,11 +14,11 @@ const LandingPage = () => {
                             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-exquisite-gold">The Art of Celebration</span>
                         </div>
 
-                        <h1 className="text-6xl md:text-8xl font-serif leading-[1.1] mb-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
+                        <h1 className="text-4xl sm:text-6xl md:text-8xl font-serif leading-[1.1] mb-8 sm:mb-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
                             Where <span className="text-exquisite-gold italic">exquisite</span> moments meet timeless gratitude.
                         </h1>
 
-                        <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-16 max-w-2xl leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
+                        <p className="text-lg md:text-2xl text-slate-600 dark:text-slate-400 mb-10 sm:mb-16 max-w-2xl leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
                             Curate world-class registries, engage distinguished guests, and immortalize every gift with personalized cinematic thank-yous.
                         </p>
 
@@ -48,12 +48,12 @@ const LandingPage = () => {
             {/* Features: The Exquisite Standard */}
             <section className="py-32 bg-white dark:bg-exquisite-midnight border-y border-slate-100 dark:border-white/5">
                 <div className="max-w-[1400px] mx-auto px-10">
-                    <div className="text-center max-w-3xl mx-auto mb-24">
-                        <h2 className="text-4xl md:text-6xl font-serif mb-8 italic">The Exquisite Standard</h2>
-                        <p className="text-lg text-slate-500 dark:text-slate-400 font-medium tracking-tight">An ecosystem of luxury features designed for the discerning host.</p>
+                    <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-24">
+                        <h2 className="text-3xl md:text-6xl font-serif mb-6 sm:mb-8 italic">The Exquisite Standard</h2>
+                        <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 font-medium tracking-tight">An ecosystem of luxury features designed for the discerning host.</p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
                         {[
                             {
                                 icon: <Diamond className="h-8 w-8 text-exquisite-gold" />,
@@ -94,8 +94,8 @@ const LandingPage = () => {
                     <div className="exquisite-card p-20 dark:bg-slate-900/40 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 gold-gradient opacity-10 -mr-32 -mt-32 rounded-full blur-3xl"></div>
                         <div className="relative z-10 space-y-12">
-                            <h2 className="text-5xl md:text-7xl font-serif max-w-4xl mx-auto leading-tight italic">Your masterpiece awaits initiation.</h2>
-                            <p className="text-xl text-slate-500 dark:text-slate-400 max-w-xl mx-auto font-medium">Join Homa. and transform your next celebration into an legendary experience.</p>
+                            <h2 className="text-4xl sm:text-5xl md:text-7xl font-serif max-w-4xl mx-auto leading-tight italic">Your masterpiece awaits initiation.</h2>
+                            <p className="text-lg sm:text-xl text-slate-500 dark:text-slate-400 max-w-xl mx-auto font-medium">Join Homa. and transform your next celebration into an legendary experience.</p>
                             <div className="pt-6">
                                 <Link to="/register" className="px-16 py-6 gold-gradient text-white text-xl font-bold rounded-2xl shadow-2xl shadow-exquisite-gold/30 hover:scale-105 transition-all inline-block uppercase tracking-[0.2em] text-sm">
                                     Become a Member
@@ -111,7 +111,7 @@ const LandingPage = () => {
                 <div className="max-w-[1400px] mx-auto px-10 flex flex-col md:flex-row justify-between items-center space-y-8 md:space-y-0">
                     <span className="text-2xl font-black tracking-tighter">Homa.</span>
                     <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400">© 2026 Exquisite Light Registry. All Rights Reserved.</p>
-                    <div className="flex space-x-12 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                    <div className="flex flex-wrap justify-center gap-8 sm:gap-12 text-[10px] font-black uppercase tracking-widest text-slate-500">
                         <Link to="#" className="hover:text-exquisite-gold transition-colors">Instagram</Link>
                         <Link to="#" className="hover:text-exquisite-gold transition-colors">Pinterest</Link>
                     </div>

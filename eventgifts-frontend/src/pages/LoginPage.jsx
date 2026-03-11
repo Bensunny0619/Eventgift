@@ -30,19 +30,19 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-exquisite-cream dark:bg-exquisite-midnight flex items-center justify-center px-10 py-20 relative overflow-hidden">
+        <div className="min-h-screen bg-exquisite-cream dark:bg-exquisite-midnight flex items-center justify-center px-4 sm:px-10 py-10 sm:py-20 relative overflow-hidden">
             {/* Background Decorations */}
             <div className="absolute top-0 right-0 w-[800px] h-[800px] gold-gradient opacity-[0.03] dark:opacity-[0.05] rounded-full blur-[120px] -mr-[300px] -mt-[300px]"></div>
             <div className="absolute bottom-0 left-0 w-[600px] h-[600px] gold-gradient opacity-[0.02] dark:opacity-[0.04] rounded-full blur-[100px] -ml-[200px] -mb-[200px]"></div>
 
             <div className="w-full max-w-xl z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-                <div className="exquisite-card p-12 md:p-16">
-                    <div className="text-center mb-12">
-                        <div className="inline-flex h-16 w-16 gold-gradient rounded-2xl items-center justify-center shadow-xl shadow-exquisite-gold/20 mb-8 transform hover:rotate-12 transition-transform cursor-pointer">
-                            <Diamond className="h-8 w-8 text-white" />
+                <div className="exquisite-card p-8 sm:p-12 md:p-16">
+                    <div className="text-center mb-10 sm:mb-12">
+                        <div className="inline-flex h-14 w-14 sm:h-16 sm:w-16 gold-gradient rounded-2xl items-center justify-center shadow-xl shadow-exquisite-gold/20 mb-6 sm:mb-8 transform hover:rotate-12 transition-transform cursor-pointer">
+                            <Diamond className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                         </div>
-                        <h1 className="text-5xl font-serif text-slate-900 dark:text-white mb-4 italic">Welcome back</h1>
-                        <p className="text-slate-500 font-medium">Continue your journey with Homa.</p>
+                        <h1 className="text-3xl sm:text-5xl font-serif text-slate-900 dark:text-white mb-4 italic">Welcome back</h1>
+                        <p className="text-sm sm:base text-slate-500 font-medium">Continue your journey with Homa.</p>
                     </div>
 
                     {error && (

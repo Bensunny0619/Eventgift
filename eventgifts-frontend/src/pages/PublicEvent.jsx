@@ -69,8 +69,8 @@ const PublicEvent = () => {
                                 <Diamond className="h-3.5 w-3.5 text-exquisite-gold" />
                                 <span className="text-[9px] font-black uppercase tracking-[0.3em] text-exquisite-gold">Exquisite Light Registry</span>
                             </div>
-                            <h1 className="text-6xl md:text-7xl font-serif leading-tight">Exquisite Smart Registry</h1>
-                            <p className="text-xl text-slate-500 dark:text-slate-400 font-medium italic">Curated luxury gifting for your most precious moments.</p>
+                            <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif leading-tight">Exquisite Smart Registry</h1>
+                            <p className="text-lg sm:text-xl text-slate-500 dark:text-slate-400 font-medium italic">Curated luxury gifting for your most precious moments.</p>
                         </div>
 
                         <div className="flex items-center space-x-6">
@@ -119,7 +119,7 @@ const PublicEvent = () => {
                         <p className="text-slate-500 font-medium">This registry is currently awaiting curation.</p>
                     </div>
                 ) : (
-                    <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-12">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 sm:gap-12">
                         {filteredItems.map(item => {
                             const progress = Math.min(100, (parseFloat(item.amount_raised || 0) / parseFloat(item.price || 1)) * 100);
                             const isFulfilled = progress >= 100;
@@ -206,8 +206,8 @@ const PublicEvent = () => {
                         <div className="absolute top-0 right-0 w-96 h-96 gold-gradient opacity-5 -mr-48 -mt-48 rounded-full blur-3xl group-hover:opacity-10 transition-opacity"></div>
                         <div className="relative z-10 space-y-6 max-w-2xl">
                             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-exquisite-gold">Exquisite Service</span>
-                            <h2 className="text-5xl font-serif italic">Need assistance choosing the perfect gift?</h2>
-                            <p className="text-lg text-slate-500 dark:text-slate-400 font-medium">Our luxury support team is available 24/7 to guide you through our most exclusive collections and personalized gift options.</p>
+                            <h2 className="text-3xl sm:text-5xl font-serif italic">Need assistance choosing the perfect gift?</h2>
+                            <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 font-medium">Our luxury support team is available 24/7 to guide you through our most exclusive collections and personalized gift options.</p>
                             <button className="px-12 py-5 gold-gradient text-white font-bold rounded-2xl shadow-xl shadow-exquisite-gold/20 hover:scale-105 transition-all text-sm uppercase tracking-[0.2em]">
                                 Contact Service
                             </button>

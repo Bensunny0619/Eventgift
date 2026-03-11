@@ -41,7 +41,7 @@ const Dashboard = () => {
         <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
 
             {/* Top Metrics Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 sm:gap-8">
                 <StatCard
                     label="Active Events"
                     value={events.length < 10 ? `0${events.length}` : events.length}
@@ -111,7 +111,7 @@ const Dashboard = () => {
                                         </div>
                                     </div>
 
-                                    <div className="p-10 flex-grow flex flex-col justify-between">
+                                    <div className="p-6 sm:p-10 flex-grow flex flex-col justify-between">
                                         <div>
                                             <div className="flex items-center justify-between mb-4">
                                                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-exquisite-gold">
@@ -126,8 +126,8 @@ const Dashboard = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <h3 className="text-4xl font-serif text-slate-900 dark:text-white mb-2 group-hover:text-exquisite-gold transition-colors">{event.title}</h3>
-                                            <p className="text-slate-500 italic font-medium mb-6 flex items-center">
+                                            <h3 className="text-2xl sm:text-4xl font-serif text-slate-900 dark:text-white mb-2 group-hover:text-exquisite-gold transition-colors">{event.title}</h3>
+                                            <p className="text-sm sm:text-base text-slate-500 italic font-medium mb-6 flex items-center">
                                                 <MapPin className="h-4 w-4 mr-2" />
                                                 {event.location}
                                             </p>
@@ -141,20 +141,20 @@ const Dashboard = () => {
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center space-x-4">
-                                            <Link
-                                                to={`/events/${event.id}`}
-                                                className="flex-grow py-4 border border-slate-200 dark:border-white/10 rounded-2xl text-center font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 transition-all uppercase text-[10px] tracking-[0.2em]"
-                                            >
-                                                Guest List
-                                            </Link>
-                                            <Link
-                                                to={`/events/${event.id}/edit`}
-                                                className="flex-grow py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl text-center font-bold hover:scale-105 transition-all uppercase text-[10px] tracking-[0.2em]"
-                                            >
-                                                Edit Details
-                                            </Link>
-                                        </div>
+                                            <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                                                <Link
+                                                    to={`/events/${event.id}`}
+                                                    className="w-full sm:flex-grow py-4 border border-slate-200 dark:border-white/10 rounded-2xl text-center font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 transition-all uppercase text-[10px] tracking-[0.2em]"
+                                                >
+                                                    Guest List
+                                                </Link>
+                                                <Link
+                                                    to={`/events/${event.id}/edit`}
+                                                    className="w-full sm:flex-grow py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl text-center font-bold hover:scale-105 transition-all uppercase text-[10px] tracking-[0.2em]"
+                                                >
+                                                    Edit Details
+                                                </Link>
+                                            </div>
                                     </div>
                                 </div>
                             ))
