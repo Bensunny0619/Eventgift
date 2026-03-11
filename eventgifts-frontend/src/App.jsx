@@ -10,6 +10,7 @@ import CreateEvent from './pages/CreateEvent';
 import EventDetails from './pages/EventDetails';
 import Events from './pages/Events';
 import GiftSuite from './pages/GiftSuite';
+import Guests from './pages/Guests';
 import PublicEvent from './pages/PublicEvent';
 import { useAuth } from './context/AuthContext';
 
@@ -68,6 +69,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/events" element={<Events />} />
             <Route path="/gifts" element={<GiftSuite />} />
+            <Route path="/guests" element={<Guests />} />
             <Route path="/events/create" element={<CreateEvent />} />
             <Route path="/events/:id" element={<EventDetails />} />
             <Route path="/registry/:id" element={<PublicEvent />} />
