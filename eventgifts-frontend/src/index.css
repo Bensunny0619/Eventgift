@@ -1,16 +1,14 @@
 @import "tailwindcss";
 
-:root {
-  --primary: #0ea5e9;
-  --primary-dark: #0284c7;
-}
-
-body {
-  @apply antialiased text-slate-900 bg-slate-50;
-  font-family: 'Inter', system-ui, sans-serif;
-}
-
 @theme {
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+
+  --color-exquisite-cream: #F8F7F2;
+  --color-exquisite-midnight: #0A0B10;
+  --color-exquisite-gold: #D4AF37;
+  --color-exquisite-gold-light: #E5C76B;
+
   --color-primary-50: #f0f9ff;
   --color-primary-100: #e0f2fe;
   --color-primary-200: #bae6fd;
@@ -22,4 +20,31 @@ body {
   --color-primary-800: #075985;
   --color-primary-900: #0c4a6e;
   --color-primary-950: #082f49;
+}
+
+@layer base {
+  body {
+    @apply font-sans antialiased bg-exquisite-cream dark:bg-exquisite-midnight text-slate-900 dark:text-exquisite-cream transition-colors duration-300;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-serif {
+    @apply font-serif;
+  }
+
+  /* Exquisite Glassmorphism Utils */
+  .exquisite-glass {
+    @apply bg-white/70 dark:bg-white/5 backdrop-blur-md border border-white/20 dark:border-white/10;
+  }
+
+  .exquisite-card {
+    @apply bg-white dark:bg-slate-900/50 rounded-[2.5rem] shadow-xl shadow-slate-200/40 dark:shadow-none border border-slate-100 dark:border-white/5;
+  }
+
+  .gold-gradient {
+    @apply bg-gradient-to-br from-exquisite-gold to-[#B8860B];
+  }
 }

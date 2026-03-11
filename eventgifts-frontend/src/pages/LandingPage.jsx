@@ -1,95 +1,122 @@
-import { ArrowRight, CheckCircle2, Star, Users, Gift, MessageSquare } from 'lucide-react';
+import { ArrowRight, Sparkles, Diamond, ShieldCheck, Video, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
     return (
-        <div className="overflow-hidden">
+        <div className="bg-exquisite-cream dark:bg-exquisite-midnight text-slate-900 dark:text-white transition-colors duration-500">
+
             {/* Hero Section */}
-            <section className="relative pt-20 pb-32 lg:pt-32 lg:pb-48 bg-gradient-to-b from-white to-primary-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-                    <div className="inline-flex items-center space-x-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-full mb-8 animate-fade-in">
-                        <Star className="h-4 w-4 fill-current" />
-                        <span className="text-sm font-semibold tracking-wide uppercase">The New Way to Celebrate</span>
-                    </div>
+            <section className="relative pt-20 pb-40 lg:pt-40 lg:pb-64 overflow-hidden">
+                <div className="max-w-[1400px] mx-auto px-10 relative z-10">
+                    <div className="max-w-4xl">
+                        <div className="inline-flex items-center space-x-3 px-6 py-2 bg-exquisite-gold/10 border border-exquisite-gold/20 rounded-full mb-10 animate-in fade-in slide-in-from-left-4 duration-1000">
+                            <Diamond className="h-4 w-4 text-exquisite-gold" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-exquisite-gold">The Art of Celebration</span>
+                        </div>
 
-                    <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 mb-8 tracking-tight leading-tight">
-                        Gifts that <span className="text-primary-600">matter</span>,<br className="hidden md:block" /> memories that last.
-                    </h1>
+                        <h1 className="text-6xl md:text-8xl font-serif leading-[1.1] mb-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
+                            Where <span className="text-exquisite-gold italic">exquisite</span> moments meet timeless gratitude.
+                        </h1>
 
-                    <p className="text-lg md:text-xl text-slate-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-                        Create a registry for your special event, invite loved ones, and receive meaningful contributions. Say thank you with personalized videos.
-                    </p>
+                        <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-16 max-w-2xl leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
+                            Curate world-class registries, engage distinguished guests, and immortalize every gift with personalized cinematic thank-yous.
+                        </p>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-                        <Link to="/register" className="w-full sm:w-auto px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white text-lg font-bold rounded-2xl shadow-xl shadow-primary-200 transition-all hover:-translate-y-1 transform">
-                            Start Your Registry
-                        </Link>
-                        <Link to="/explore" className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-slate-50 text-slate-700 text-lg font-bold rounded-2xl border border-slate-200 shadow-sm transition-all hover:border-primary-300">
-                            Explore Events
-                        </Link>
+                        <div className="flex flex-col sm:flex-row items-center space-y-6 sm:space-y-0 sm:space-x-8 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-700">
+                            <Link to="/register" className="w-full sm:w-auto px-12 py-5 gold-gradient text-white text-lg font-bold rounded-2xl shadow-2xl shadow-exquisite-gold/30 hover:scale-105 transition-all flex items-center justify-center space-x-3 group">
+                                <span>Create Your Atelier</span>
+                                <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform" />
+                            </Link>
+                            <Link to="/explore" className="w-full sm:w-auto px-12 py-5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-lg font-bold rounded-2xl hover:bg-white dark:hover:bg-white/5 transition-all text-center">
+                                View Collections
+                            </Link>
+                        </div>
                     </div>
                 </div>
 
-                {/* Decorative elements */}
-                <div className="absolute top-1/2 left-1/4 -translate-y-1/2 -translate-x-1/2 w-64 h-64 bg-primary-400/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                {/* Decorative Elements */}
+                <div className="absolute top-0 right-0 w-1/2 h-full pointer-events-none opacity-20 dark:opacity-10 translate-x-1/4">
+                    <Diamond className="w-full h-full text-exquisite-gold" />
+                </div>
+                <div className="absolute top-1/2 right-20 -translate-y-1/2 w-[500px] h-[700px] bg-white dark:bg-slate-900 rounded-[3rem] shadow-2xl rotate-6 hidden lg:block overflow-hidden border border-white/20">
+                    <div className="h-full w-full gold-gradient opacity-10 flex items-center justify-center">
+                        <Sparkles className="h-40 w-40 text-exquisite-gold opacity-20" />
+                    </div>
+                </div>
             </section>
 
-            {/* Feature Section */}
-            <section className="py-24 bg-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Why choose Homa.?</h2>
-                        <p className="text-slate-600 max-w-xl mx-auto">Modern features designed for seamless event management and heartwarming gratitude.</p>
+            {/* Features: The Exquisite Standard */}
+            <section className="py-32 bg-white dark:bg-exquisite-midnight border-y border-slate-100 dark:border-white/5">
+                <div className="max-w-[1400px] mx-auto px-10">
+                    <div className="text-center max-w-3xl mx-auto mb-24">
+                        <h2 className="text-4xl md:text-6xl font-serif mb-8 italic">The Exquisite Standard</h2>
+                        <p className="text-lg text-slate-500 dark:text-slate-400 font-medium tracking-tight">An ecosystem of luxury features designed for the discerning host.</p>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-12">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
                         {[
                             {
-                                icon: <Gift className="h-8 w-8 text-primary-600" />,
-                                title: "Flexible Registry",
-                                desc: "Add any item or fund. Guests can contribute partial amounts to expensive gifts."
+                                icon: <Diamond className="h-8 w-8 text-exquisite-gold" />,
+                                title: "Smart Registry",
+                                desc: "Dynamic item management with seamless partial contribution support for high-value acquisitions."
                             },
                             {
-                                icon: <Users className="h-8 w-8 text-primary-600" />,
-                                title: "Guest Interaction",
-                                desc: "Engage with your guests through messages and shared celebrations."
+                                icon: <ShieldCheck className="h-8 w-8 text-exquisite-gold" />,
+                                title: "Secure Pledges",
+                                desc: "Elite verification protocol ensures every contribution is accounted for and authenticated."
                             },
                             {
-                                icon: <MessageSquare className="h-8 w-8 text-primary-600" />,
-                                title: "Video Thanks",
-                                desc: "Send personalized video notes to thank your contributors. Make it special."
+                                icon: <Video className="h-8 w-8 text-exquisite-gold" />,
+                                title: "Gratitude Hub",
+                                desc: "Elevate your 'thank you' with high-definition video messages delivered straight to your guests."
+                            },
+                            {
+                                icon: <Heart className="h-8 w-8 text-exquisite-gold" />,
+                                title: "Concierge Service",
+                                desc: "Curated gift selections and personalized assistance for your guests, 24/7."
                             }
                         ].map((feature, i) => (
-                            <div key={i} className="group p-8 rounded-3xl border border-slate-100 bg-slate-50/50 hover:bg-white hover:border-primary-200 hover:shadow-2xl hover:shadow-primary-100 transition-all duration-300">
-                                <div className="mb-6 inline-block bg-white p-4 rounded-2xl shadow-sm group-hover:bg-primary-50 transition-colors">
+                            <div key={i} className="group space-y-8 p-10 exquisite-card hover:translate-y-[-10px] transition-all duration-500">
+                                <div className="h-16 w-16 bg-exquisite-cream dark:bg-white/5 rounded-2xl flex items-center justify-center border border-slate-100 dark:border-white/10 group-hover:bg-exquisite-gold group-hover:text-white transition-colors">
                                     {feature.icon}
                                 </div>
-                                <h3 className="text-xl font-bold text-slate-900 mb-3">{feature.title}</h3>
-                                <p className="text-slate-600 leading-relaxed">{feature.desc}</p>
+                                <h3 className="text-2xl font-serif">{feature.title}</h3>
+                                <p className="text-slate-500 dark:text-slate-400 leading-relaxed font-medium">{feature.desc}</p>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* CTA Section */}
-            <section className="py-24">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="bg-primary-600 rounded-[3rem] p-8 md:p-20 text-center relative overflow-hidden shadow-2xl shadow-primary-200">
-                        <div className="relative z-10">
-                            <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-8">Ready to start your first event?</h2>
-                            <p className="text-primary-100 text-lg mb-12 max-w-xl mx-auto">Join thousands of hosts making their celebrations more organized and meaningful.</p>
-                            <Link to="/register" className="inline-flex items-center px-8 py-4 bg-white text-primary-700 text-lg font-bold rounded-2xl hover:bg-primary-50 transition-all">
-                                Create Account <ArrowRight className="ml-2 h-5 w-5" />
-                            </Link>
+            {/* CTA: Final Invitation */}
+            <section className="py-40">
+                <div className="max-w-[1200px] mx-auto px-10 text-center">
+                    <div className="exquisite-card p-20 dark:bg-slate-900/40 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 gold-gradient opacity-10 -mr-32 -mt-32 rounded-full blur-3xl"></div>
+                        <div className="relative z-10 space-y-12">
+                            <h2 className="text-5xl md:text-7xl font-serif max-w-4xl mx-auto leading-tight italic">Your masterpiece awaits initiation.</h2>
+                            <p className="text-xl text-slate-500 dark:text-slate-400 max-w-xl mx-auto font-medium">Join Homa. and transform your next celebration into an legendary experience.</p>
+                            <div className="pt-6">
+                                <Link to="/register" className="px-16 py-6 gold-gradient text-white text-xl font-bold rounded-2xl shadow-2xl shadow-exquisite-gold/30 hover:scale-105 transition-all inline-block uppercase tracking-[0.2em] text-sm">
+                                    Become a Member
+                                </Link>
+                            </div>
                         </div>
-                        {/* CTA Background Deco */}
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-2xl"></div>
-                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full -ml-32 -mb-32 blur-2xl"></div>
                     </div>
                 </div>
             </section>
+
+            {/* Footer Placeholder for Branding */}
+            <footer className="py-20 border-t border-slate-100 dark:border-white/5 opacity-50">
+                <div className="max-w-[1400px] mx-auto px-10 flex flex-col md:flex-row justify-between items-center space-y-8 md:space-y-0">
+                    <span className="text-2xl font-black tracking-tighter">Homa.</span>
+                    <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400">© 2026 Exquisite Light Registry. All Rights Reserved.</p>
+                    <div className="flex space-x-12 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                        <Link to="#" className="hover:text-exquisite-gold transition-colors">Instagram</Link>
+                        <Link to="#" className="hover:text-exquisite-gold transition-colors">Pinterest</Link>
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 };

@@ -1,0 +1,83 @@
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import {
+    LayoutDashboard,
+    Calendar,
+    Gift,
+    Users,
+    BarChart3,
+    Settings,
+    PlusCircle,
+    Diamond
+} from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+
+const Sidebar = () => {
+    const { user } = useAuth();
+
+    if (!user) return null;
+
+    const menuItems = [
+        { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
+        { icon: Calendar, label: 'Elite Events', path: '/events' },
+        { icon: Gift, label: 'The Gift Suite', path: '/gifts' },
+        { icon: Users, label: 'Distinguished Guests', path: '/guests' },
+        { icon: BarChart3, label: 'Luxe Analytics', path: '/analytics' },
+    ];
+
+    return (
+        <aside className="fixed left-0 top-0 h-screen w-72 bg-white dark:bg-exquisite-midnight border-r border-slate-100 dark:border-white/5 z-50 flex flex-col pt-32 pb-8 px-6 transition-all duration-300">
+            {/* Brand in Sidebar (optional if in header, but design shows it) */}
+            <div className="absolute top-8 left-8 flex items-center space-x-3 group">
+                <div className="h-12 w-12 gold-gradient rounded-2xl flex items-center justify-center shadow-lg shadow-exquisite-gold/20 transform group-hover:rotate-12 transition-transform duration-500">
+                    <Diamond className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                    <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Exquisite Host</h2>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-exquisite-gold">Luxe Command Center</p>
+                </div>
+            </div>
+
+            <nav className="flex-grow space-y-2 mt-8">
+                {menuItems.map((item) => (
+                    <NavLink
+                        key={item.path}
+                        to={item.path}
+                        className={({ isActive }) => `
+              flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all duration-300 group
+              ${isActive
+                                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xl shadow-slate-200 dark:shadow-none'
+                                : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white'}
+            `}
+                    >
+                        <item.icon className={`h-5 w-5 transition-transform duration-300 group-hover:scale-110`} />
+                        <span className="font-bold tracking-tight">{item.label}</span>
+                    </NavLink>
+                ))}
+            </nav>
+
+            <div className="pt-8 space-y-4">
+                <div className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-600 mb-4 px-6">
+                    Preferences
+                </div>
+                <NavLink
+                    to="/settings"
+                    className="flex items-center space-x-4 px-6 py-4 rounded-2xl text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5 transition-all group"
+                >
+                    <Settings className="h-5 w-5 group-hover:rotate-45 transition-transform" />
+                    <span className="font-bold tracking-tight">Atelier Settings</span>
+                </NavLink>
+
+                <NavLink
+                    to="/events/create"
+                    className="flex items-center justify-center space-x-2 w-full py-4 px-6 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold shadow-xl hover:scale-[1.02] transition-all"
+                >
+                    <PlusCircle className="h-5 w-5" />
+                    <span>Create New Event</span>
+                </NavLink>
+            </div>
+        </aside>
+    );
+};
+
+export default Sidebar;
