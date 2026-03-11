@@ -6,6 +6,7 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import Dashboard from './pages/Dashboard';
+import Analytics from './pages/Analytics';
 import CreateEvent from './pages/CreateEvent';
 import EventDetails from './pages/EventDetails';
 import Events from './pages/Events';
@@ -70,6 +71,7 @@ function App() {
             <Route path="/events" element={<Events />} />
             <Route path="/gifts" element={<GiftSuite />} />
             <Route path="/guests" element={<Guests />} />
+            <Route path="/analytics" element={<Analytics />} />
             <Route path="/events/create" element={<CreateEvent />} />
             <Route path="/events/:id" element={<EventDetails />} />
             <Route path="/registry/:id" element={<PublicEvent />} />
