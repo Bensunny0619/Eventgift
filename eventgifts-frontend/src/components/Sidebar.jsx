@@ -22,7 +22,7 @@ const Sidebar = () => {
         { icon: Calendar, label: 'Elite Events', path: '/events' },
         { icon: Gift, label: 'The Gift Suite', path: '/gifts' },
         { icon: Users, label: 'Distinguished Guests', path: '/guests' },
-        { icon: BarChart3, label: 'Luxe Analytics', path: '/analytics' },
+        { icon: BarChart3, label: 'Analytics', path: '/analytics' },
     ];
 
     return (
@@ -34,7 +34,7 @@ const Sidebar = () => {
                 </div>
                 <div>
                     <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Exquisite Host</h2>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-exquisite-gold">Luxe Command Center</p>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-exquisite-gold">Management Dashboard</p>
                 </div>
             </div>
 
@@ -65,7 +65,7 @@ const Sidebar = () => {
                     className="flex items-center space-x-4 px-6 py-4 rounded-2xl text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5 transition-all group"
                 >
                     <Settings className="h-5 w-5 group-hover:rotate-45 transition-transform" />
-                    <span className="font-bold tracking-tight">Atelier Settings</span>
+                    <span className="font-bold tracking-tight">Account Settings</span>
                 </NavLink>
 
                 <NavLink

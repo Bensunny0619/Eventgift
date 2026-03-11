@@ -24,7 +24,7 @@ const LandingPage = () => {
 
                         <div className="flex flex-col sm:flex-row items-center space-y-6 sm:space-y-0 sm:space-x-8 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-700">
                             <Link to="/register" className="w-full sm:w-auto px-12 py-5 gold-gradient text-white text-lg font-bold rounded-2xl shadow-2xl shadow-exquisite-gold/30 hover:scale-105 transition-all flex items-center justify-center space-x-3 group">
-                                <span>Create Your Atelier</span>
+                                <span>Create Your Account</span>
                                 <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform" />
                             </Link>
                             <Link to="/explore" className="w-full sm:w-auto px-12 py-5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-lg font-bold rounded-2xl hover:bg-white dark:hover:bg-white/5 transition-all text-center">
@@ -72,7 +72,7 @@ const LandingPage = () => {
                             },
                             {
                                 icon: <Heart className="h-8 w-8 text-exquisite-gold" />,
-                                title: "Concierge Service",
+                                title: "Gift Service",
                                 desc: "Curated gift selections and personalized assistance for your guests, 24/7."
                             }
                         ].map((feature, i) => (

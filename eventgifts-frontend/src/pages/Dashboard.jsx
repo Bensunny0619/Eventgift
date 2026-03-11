@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/api';
 import {
+    Diamond,
     Plus,
     Loader2,
     Sparkles,
@@ -42,7 +43,7 @@ const Dashboard = () => {
             {/* Top Metrics Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
                 <StatCard
-                    label="Active Soirées"
+                    label="Active Events"
                     value={events.length < 10 ? `0${events.length}` : events.length}
                     trend="+12.5%"
                     icon={Sparkles}
@@ -87,7 +88,7 @@ const Dashboard = () => {
                         {events.length === 0 ? (
                             <div className="exquisite-card p-20 text-center flex flex-col items-center">
                                 <Sparkles className="h-16 w-16 text-exquisite-gold/30 mb-6" />
-                                <h3 className="text-2xl font-serif text-slate-900 dark:text-white mb-2">No active soirées</h3>
+                                <h3 className="text-2xl font-serif text-slate-900 dark:text-white mb-2">No active events</h3>
                                 <p className="text-slate-500 max-w-sm mb-8">It's time to curate your next masterpiece. Start by creating a new event registry.</p>
                                 <Link to="/events/create" className="px-10 py-4 gold-gradient text-white font-bold rounded-2xl shadow-xl shadow-exquisite-gold/20 hover:scale-105 transition-all">
                                     Initiate Event
@@ -164,7 +165,7 @@ const Dashboard = () => {
                 {/* Sidebar: The Gift Concierge */}
                 <div className="space-y-8">
                     <div className="px-2">
-                        <h2 className="text-3xl font-serif text-slate-900 dark:text-white">The Gift Concierge</h2>
+                        <h2 className="text-3xl font-serif text-slate-900 dark:text-white">The Gift Service</h2>
                         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mt-2">Curated selections for your guests</p>
                     </div>
 

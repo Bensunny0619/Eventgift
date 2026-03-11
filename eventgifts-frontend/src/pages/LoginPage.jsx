@@ -19,7 +19,11 @@ const LoginPage = () => {
             await login(email, password);
             navigate('/dashboard');
         } catch (err) {
-            setError('Invalid credentials. Please attempt again.');
+            if (err.response?.data?.message) {
+                setError(err.response.data.message);
+            } else {
+                setError('Invalid credentials. Please attempt again.');
+            }
         } finally {
             setIsLoading(false);
         }
@@ -59,6 +63,7 @@ const LoginPage = () => {
                                 <input
                                     type="email"
                                     required
+                                    autoComplete="email"
                                     className="block w-full pl-16 pr-6 py-5 bg-transparent border-2 border-slate-50 dark:border-white/5 rounded-2xl text-slate-900 dark:text-white focus:outline-none focus:border-exquisite-gold/30 transition-all font-bold placeholder-slate-300 dark:placeholder-slate-700"
                                     placeholder="Enter your email"
                                     value={email}
@@ -76,6 +81,7 @@ const LoginPage = () => {
                                 <input
                                     type="password"
                                     required
+                                    autoComplete="current-password"
                                     className="block w-full pl-16 pr-6 py-5 bg-transparent border-2 border-slate-50 dark:border-white/5 rounded-2xl text-slate-900 dark:text-white focus:outline-none focus:border-exquisite-gold/30 transition-all font-bold placeholder-slate-300 dark:placeholder-slate-700"
                                     placeholder="••••••••"
                                     value={password}

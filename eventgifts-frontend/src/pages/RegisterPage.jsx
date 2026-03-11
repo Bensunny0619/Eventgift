@@ -19,7 +19,14 @@ const RegisterPage = () => {
             await api.post('/register', { name, email, password });
             navigate('/login');
         } catch (err) {
-            setError('Registration failed. Please verify your details.');
+            if (err.response?.data?.errors) {
+                const errorMessages = Object.values(err.response.data.errors).flat().join(' ');
+                setError(errorMessages);
+            } else if (err.response?.data?.message) {
+                setError(err.response.data.message);
+            } else {
+                setError('Registration failed. Please verify your details.');
+            }
         } finally {
             setIsLoading(false);
         }
@@ -59,6 +66,7 @@ const RegisterPage = () => {
                                 <input
                                     type="text"
                                     required
+                                    autoComplete="name"
                                     className="block w-full pl-16 pr-6 py-5 bg-transparent border-2 border-slate-50 dark:border-white/5 rounded-2xl text-slate-900 dark:text-white focus:outline-none focus:border-exquisite-gold/30 transition-all font-bold placeholder-slate-300 dark:placeholder-slate-700"
                                     placeholder="Enter full name"
                                     value={name}
@@ -76,6 +84,7 @@ const RegisterPage = () => {
                                 <input
                                     type="email"
                                     required
+                                    autoComplete="email"
                                     className="block w-full pl-16 pr-6 py-5 bg-transparent border-2 border-slate-50 dark:border-white/5 rounded-2xl text-slate-900 dark:text-white focus:outline-none focus:border-exquisite-gold/30 transition-all font-bold placeholder-slate-300 dark:placeholder-slate-700"
                                     placeholder="email@example.com"
                                     value={email}
@@ -93,6 +102,7 @@ const RegisterPage = () => {
                                 <input
                                     type="password"
                                     required
+                                    autoComplete="new-password"
                                     className="block w-full pl-16 pr-6 py-5 bg-transparent border-2 border-slate-50 dark:border-white/5 rounded-2xl text-slate-900 dark:text-white focus:outline-none focus:border-exquisite-gold/30 transition-all font-bold placeholder-slate-300 dark:placeholder-slate-700"
                                     placeholder="••••••••"
                                     value={password}
@@ -110,7 +120,7 @@ const RegisterPage = () => {
                                 <Loader2 className="h-6 w-6 animate-spin" />
                             ) : (
                                 <>
-                                    <span>Create Atelier</span>
+                                    <span>Create Account</span>
                                     <ArrowRight className="h-5 w-5" />
                                 </>
                             )}

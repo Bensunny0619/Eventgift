@@ -38,7 +38,7 @@ const Navbar = () => {
 
                         {user && (
                             <h1 className="text-3xl font-serif text-slate-900 dark:text-white">
-                                Bienvenue, <span className="text-exquisite-gold">{user.name.split(' ')[0]}</span>
+                                Welcome, <span className="text-exquisite-gold">{user.name.split(' ')[0]}</span>
                             </h1>
                         )}
                     </div>

@@ -207,9 +207,9 @@ const PublicEvent = () => {
                         <div className="relative z-10 space-y-6 max-w-2xl">
                             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-exquisite-gold">Exquisite Service</span>
                             <h2 className="text-5xl font-serif italic">Need assistance choosing the perfect gift?</h2>
-                            <p className="text-lg text-slate-500 dark:text-slate-400 font-medium">Our luxury concierges are available 24/7 to guide you through our most exclusive collections and personalized gift options.</p>
+                            <p className="text-lg text-slate-500 dark:text-slate-400 font-medium">Our luxury support team is available 24/7 to guide you through our most exclusive collections and personalized gift options.</p>
                             <button className="px-12 py-5 gold-gradient text-white font-bold rounded-2xl shadow-xl shadow-exquisite-gold/20 hover:scale-105 transition-all text-sm uppercase tracking-[0.2em]">
-                                Contact Concierge
+                                Contact Service
                             </button>
                         </div>
                         <div className="relative z-10 h-64 w-64 bg-slate-50 dark:bg-white/5 rounded-full flex items-center justify-center border border-slate-100 dark:border-white/10 group-hover:rotate-12 transition-transform duration-700">
