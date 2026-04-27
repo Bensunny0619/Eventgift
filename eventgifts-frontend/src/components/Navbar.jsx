@@ -31,7 +31,7 @@ const Navbar = ({ toggleSidebar, isDashboard, isSidebarOpen }) => {
                                 <div className="h-10 w-10 gold-gradient rounded-xl flex items-center justify-center shadow-lg shadow-exquisite-gold/20">
                                     <Diamond className="h-5 w-5 text-white" />
                                 </div>
-                                <span className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">Homa.</span>
+                                <span className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">Eventgift</span>
                             </Link>
                         )}
 
@@ -93,7 +93,7 @@ const Navbar = ({ toggleSidebar, isDashboard, isSidebarOpen }) => {
                         ) : (
                             <div className="hidden md:flex items-center space-x-4">
                                 <Link to="/login" className="px-6 py-3 font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Login</Link>
-                                <Link to="/register" className="px-8 py-3.5 gold-gradient text-white font-bold rounded-2xl shadow-xl shadow-exquisite-gold/20 hover:scale-105 transition-all">Join Homa.</Link>
+                                <Link to="/register" className="px-8 py-3.5 gold-gradient text-white font-bold rounded-2xl shadow-xl shadow-exquisite-gold/20 hover:scale-105 transition-all">Join Eventgift</Link>
                             </div>
                         )}
 

@@ -67,7 +67,7 @@ const PublicEvent = () => {
                         <div className="space-y-6">
                             <div className="inline-flex items-center space-x-3 px-5 py-2 bg-exquisite-gold/10 border border-exquisite-gold/20 rounded-full">
                                 <Diamond className="h-3.5 w-3.5 text-exquisite-gold" />
-                                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-exquisite-gold">Exquisite Light Registry</span>
+                                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-exquisite-gold">Eventgift Registry</span>
                             </div>
                             <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif leading-tight">Event Gift Registry</h1>
                             <p className="text-lg sm:text-xl text-slate-500 dark:text-slate-400 font-medium italic">Support our celebration with a gift from our registry.</p>
@@ -115,8 +115,8 @@ const PublicEvent = () => {
                 {filteredItems.length === 0 ? (
                     <div className="exquisite-card p-32 text-center">
                         <Gift className="h-20 w-20 text-exquisite-gold/20 mx-auto mb-10" />
-                        <h3 className="text-3xl font-serif mb-4">No treasures found</h3>
-                        <p className="text-slate-500 font-medium">This registry is currently awaiting curation.</p>
+                        <h3 className="text-3xl font-serif mb-4">No items found</h3>
+                        <p className="text-slate-500 font-medium">No gifts have been added to this registry yet.</p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 sm:gap-12">
@@ -144,7 +144,7 @@ const PublicEvent = () => {
                                         {!isFulfilled && progress > 50 && (
                                             <div className="absolute top-8 left-8 z-20">
                                                 <span className="px-5 py-2 gold-gradient rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg">
-                                                    Highly Coveted
+                                                    Popular Item
                                                 </span>
                                             </div>
                                         )}
@@ -155,7 +155,7 @@ const PublicEvent = () => {
                                             <h3 className="text-3xl font-serif text-slate-900 dark:text-white leading-tight">{item.title}</h3>
                                             <p className="text-2xl font-serif text-exquisite-gold">₦{parseFloat(item.price).toLocaleString()}</p>
                                             <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed italic line-clamp-2">
-                                                {item.description || 'Iconic French craftsmanship with exquisite details for your most precious moments.'}
+                                                {item.description || 'A beautiful gift for our special day.'}
                                             </p>
                                         </div>
 
@@ -205,11 +205,11 @@ const PublicEvent = () => {
                     <div className="exquisite-card p-20 flex flex-col md:flex-row items-center justify-between gap-12 relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-96 h-96 gold-gradient opacity-5 -mr-48 -mt-48 rounded-full blur-3xl group-hover:opacity-10 transition-opacity"></div>
                         <div className="relative z-10 space-y-6 max-w-2xl">
-                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-exquisite-gold">Exquisite Service</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-exquisite-gold">Help & Support</span>
                             <h2 className="text-3xl sm:text-5xl font-serif italic">Need assistance choosing the perfect gift?</h2>
-                            <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 font-medium">Our luxury support team is available 24/7 to guide you through our most exclusive collections and personalized gift options.</p>
+                            <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 font-medium">Our support team is here to help you choose the perfect gift or answer any questions you may have.</p>
                             <button className="px-12 py-5 gold-gradient text-white font-bold rounded-2xl shadow-xl shadow-exquisite-gold/20 hover:scale-105 transition-all text-sm uppercase tracking-[0.2em]">
-                                Contact Service
+                                Contact Support
                             </button>
                         </div>
                         <div className="relative z-10 h-64 w-64 bg-slate-50 dark:bg-white/5 rounded-full flex items-center justify-center border border-slate-100 dark:border-white/10 group-hover:rotate-12 transition-transform duration-700">
@@ -226,7 +226,7 @@ const PublicEvent = () => {
                     className="inline-flex items-center space-x-3 text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 hover:text-exquisite-gold transition-colors group"
                 >
                     <ShieldCheck className="h-5 w-5 group-hover:scale-110 transition-transform" />
-                    <span>Verify My Pledge Access</span>
+                    <span>Verify My Gift Pledge</span>
                 </button>
             </div>
 
@@ -246,7 +246,7 @@ const PublicEvent = () => {
 
             {/* Minimal Footer */}
             <footer className="pb-12 text-center opacity-30">
-                <p className="text-[9px] font-black uppercase tracking-[0.5em] text-slate-400">© 2026 EXQUISITE LIGHT REGISTRY. ALL RIGHTS RESERVED.</p>
+                <p className="text-[9px] font-black uppercase tracking-[0.5em] text-slate-400">© 2026 EVENTGIFT REGISTRY. ALL RIGHTS RESERVED.</p>
             </footer>
         </div>
     );

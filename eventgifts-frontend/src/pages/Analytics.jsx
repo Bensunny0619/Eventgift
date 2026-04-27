@@ -68,9 +68,9 @@ const Analytics = () => {
             {/* Header Area */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 px-2">
                 <div>
-                    <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-white italic">Event Insights</h1>
+                    <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-white">Event Performance</h1>
                     <p className="text-slate-500 dark:text-slate-400 mt-4 text-lg font-medium max-w-2xl">
-                        A sophisticated overview of your event performance, guest interactions, and gift suite metrics.
+                        How your events and gift registries are performing.
                     </p>
                 </div>
                 <div className="flex items-center space-x-4 bg-white dark:bg-white/5 p-2 rounded-2xl border border-slate-100 dark:border-white/5 shadow-sm">
@@ -138,7 +138,7 @@ const Analytics = () => {
 
                 {/* Popular Gifts Sidebar */}
                 <div className="exquisite-card p-8 flex flex-col">
-                    <h3 className="text-2xl font-serif text-slate-900 dark:text-white mb-8">Gift Excellence</h3>
+                    <h3 className="text-2xl font-serif text-slate-900 dark:text-white mb-8">Top Gift Items</h3>
                     <div className="space-y-6 flex-grow">
                         {popularGifts.length === 0 ? (
                             <div className="py-12 text-center">
@@ -178,16 +178,16 @@ const Analytics = () => {
                     </div>
                     <h2 className="text-4xl font-serif mb-6 leading-tight italic">
                         {engagementRate > 0 ? (
-                            <>Your distinguished events see a <span className="text-exquisite-gold">{engagementRate}%</span> engagement rate.</>
+                            <>Your events have a <span className="text-exquisite-gold">{engagementRate}%</span> engagement rate.</>
                         ) : (
-                            <>Curate your first event to begin savouring <span className="text-exquisite-gold">exquisite engagement</span> analytics.</>
+                            <>Create your first event to see how your guests are engaging.</>
                         )}
                     </h2>
-                    <p className="text-sm font-medium opacity-60 leading-relaxed">Our predictive algorithms suggest that continuing your current curation strategy will lead to significant growth in your host prestige score.</p>
+                    <p className="text-sm font-medium opacity-60 leading-relaxed">Keep creating events and managing your registries to see more insights here.</p>
                 </div>
                 <div className="relative z-10 flex flex-col items-center justify-center p-12 exquisite-card border-none bg-white/10 dark:bg-slate-900/10 backdrop-blur-xl">
-                    <div className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-2">Host Prestige Rating</div>
-                    <div className="text-7xl font-serif text-exquisite-gold mb-4 italic">{engagementRate > 50 ? 'Diamond' : 'Elite'}</div>
+                    <div className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-2">Engagement Level</div>
+                    <div className="text-7xl font-serif text-exquisite-gold mb-4 italic">{engagementRate > 50 ? 'Very High' : 'High'}</div>
                     <div className="flex space-x-1">
                         {[...Array(5)].map((_, i) => <Star key={i} className="h-4 w-4 fill-exquisite-gold text-exquisite-gold shadow-lg" />)}
                     </div>

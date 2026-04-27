@@ -33,9 +33,9 @@ const Settings = () => {
         <div className="max-w-5xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-20">
             {/* Header */}
             <div className="px-2">
-                <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-white italic">Account Sanctuary</h1>
+                <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-white">Account Settings</h1>
                 <p className="text-slate-500 dark:text-slate-400 mt-4 text-lg font-medium">
-                    Personalize your hosting experience and manage your distinguished identity.
+                    Manage your profile, security, and app preferences.
                 </p>
             </div>
 
@@ -51,7 +51,7 @@ const Settings = () => {
                     </div>
                 </div>
                 <div className="flex-grow text-center md:text-left relative z-10">
-                    <h2 className="text-3xl font-serif mb-2">{user?.name || 'Distinguished Host'}</h2>
+                    <h2 className="text-3xl font-serif mb-2">{user?.name || 'User'}</h2>
                     <div className="flex flex-wrap justify-center md:justify-start gap-4">
                         <span className="px-5 py-2 rounded-xl bg-white/10 dark:bg-slate-900/10 border border-white/20 dark:border-slate-900/10 text-xs font-bold tracking-tight backdrop-blur-md">Member since Feb 2026</span>
                         <span className="px-5 py-2 rounded-xl bg-exquisite-gold/20 border border-exquisite-gold/30 text-xs font-bold tracking-tight text-exquisite-gold backdrop-blur-md">Identity Verified</span>
@@ -82,10 +82,10 @@ const Settings = () => {
                 <div className="lg:col-span-3">
                     {activeTab === 'Profile' && (
                         <div className="exquisite-card p-10 space-y-10 animate-in fade-in slide-in-from-right-4 duration-500">
-                            <h3 className="text-2xl font-serif text-slate-900 dark:text-white">Profile Identity</h3>
+                            <h3 className="text-2xl font-serif text-slate-900 dark:text-white">Profile Details</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-1">Host Name</label>
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-1">Your Name</label>
                                     <div className="relative group">
                                         <User className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-exquisite-gold transition-colors" />
                                         <input 
@@ -96,7 +96,7 @@ const Settings = () => {
                                     </div>
                                 </div>
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-1">Email Legacy</label>
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-1">Email Address</label>
                                     <div className="relative group">
                                         <Mail className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-exquisite-gold transition-colors" />
                                         <input 
@@ -108,14 +108,14 @@ const Settings = () => {
                                 </div>
                             </div>
                             <div className="pt-6">
-                                <button className="px-10 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold shadow-2xl hover:scale-[1.02] transition-all">Save Essence</button>
+                                <button className="px-10 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold shadow-2xl hover:scale-[1.02] transition-all">Save Profile</button>
                             </div>
                         </div>
                     )}
 
                     {activeTab === 'Security' && (
                         <div className="exquisite-card p-10 space-y-10 animate-in fade-in slide-in-from-right-4 duration-500">
-                            <h3 className="text-2xl font-serif text-slate-900 dark:text-white">Security Vault</h3>
+                            <h3 className="text-2xl font-serif text-slate-900 dark:text-white">Security Settings</h3>
                             <div className="space-y-8">
                                 <div className="space-y-3">
                                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-1">Current Password</label>
@@ -164,9 +164,9 @@ const Settings = () => {
                             <h3 className="text-2xl font-serif text-slate-900 dark:text-white">Experience Preferences</h3>
                             <div className="space-y-6">
                                 {[
-                                    { label: 'Midnight Luxe Aesthetic', desc: 'Enable deep dark modes for low-light management.', icon: Moon, active: true },
-                                    { label: 'Exquisite Animations', desc: 'Savour sub-pixel fluid transitions throughout the platform.', icon: Globe, active: true },
-                                    { label: 'Haptic Sophistication', desc: 'Subtle feedback during distinguished interactions.', icon: Smartphone, active: false },
+                                    { label: 'Dark Mode', desc: 'Enable dark mode for a better nighttime experience.', icon: Moon, active: true },
+                                    { label: 'Enable Animations', desc: 'Smooth transitions throughout the platform.', icon: Globe, active: true },
+                                    { label: 'Haptic Feedback', desc: 'Subtle vibration feedback during interactions.', icon: Smartphone, active: false },
                                 ].map((pref, i) => (
                                     <div key={i} className="flex items-center justify-between p-6 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 group hover:border-exquisite-gold/30 transition-all">
                                         <div className="flex items-center space-x-6">

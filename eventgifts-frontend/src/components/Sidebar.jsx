@@ -19,9 +19,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
     const menuItems = [
         { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
-        { icon: Calendar, label: 'Elite Events', path: '/events' },
-        { icon: Gift, label: 'The Gift Suite', path: '/gifts' },
-        { icon: Users, label: 'Distinguished Guests', path: '/guests' },
+        { icon: Calendar, label: 'My Events', path: '/events' },
+        { icon: Gift, label: 'Gift Catalog', path: '/gifts' },
+        { icon: Users, label: 'Guest List', path: '/guests' },
         { icon: BarChart3, label: 'Analytics', path: '/analytics' },
     ];
 
@@ -40,7 +40,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                         <Diamond className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Exquisite Host</h2>
+                        <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Eventgift</h2>
                         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-exquisite-gold">Management Dashboard</p>
                     </div>
                 </div>

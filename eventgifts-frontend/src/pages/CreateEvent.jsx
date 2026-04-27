@@ -36,8 +36,8 @@ const CreateEvent = () => {
                 <div className="inline-flex h-16 w-16 gold-gradient rounded-2xl items-center justify-center shadow-xl shadow-exquisite-gold/20 mb-8 transform hover:rotate-12 transition-transform cursor-pointer">
                     <Sparkles className="h-8 w-8 text-white" />
                 </div>
-                <h1 className="text-4xl sm:text-6xl font-serif text-slate-900 dark:text-white mb-4 italic">Initiate Event</h1>
-                <p className="text-slate-500 dark:text-slate-400 font-medium">Curate your next masterpiece gathering.</p>
+                <h1 className="text-4xl sm:text-6xl font-serif text-slate-900 dark:text-white mb-4">Create New Event</h1>
+                <p className="text-slate-500 dark:text-slate-400 font-medium">Plan your next special celebration.</p>
             </div>
 
             <div className="exquisite-card p-8 md:p-16 relative overflow-hidden">
@@ -63,7 +63,7 @@ const CreateEvent = () => {
                             <input
                                 type="text"
                                 required
-                                placeholder="e.g., The Heritage Gala 2026"
+                                placeholder="e.g., Kunle's Wedding Ceremony"
                                 className="block w-full pl-16 pr-6 py-5 bg-transparent border-2 border-slate-50 dark:border-white/5 rounded-2xl text-slate-900 dark:text-white focus:outline-none focus:border-exquisite-gold/30 transition-all font-bold placeholder-slate-300 dark:placeholder-slate-700"
                                 value={formData.title}
                                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -91,7 +91,7 @@ const CreateEvent = () => {
                             {/* Location */}
                             <div className="relative group">
                                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 absolute -top-2.5 left-5 px-2 bg-white dark:bg-slate-900 transition-colors group-focus-within:text-exquisite-gold">
-                                    Distinguished Location
+                                    Event Location
                                 </label>
                                 <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
                                     <MapPin className="h-5 w-5 text-slate-300 group-focus-within:text-exquisite-gold transition-colors" />
@@ -109,14 +109,14 @@ const CreateEvent = () => {
                         {/* Description */}
                         <div className="relative group">
                             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 absolute -top-2.5 left-5 px-2 bg-white dark:bg-slate-900 transition-colors group-focus-within:text-exquisite-gold">
-                                Curated Details
+                                Event Description
                             </label>
                             <div className="absolute top-6 left-6 flex items-start pointer-events-none">
                                 <AlignLeft className="h-5 w-5 text-slate-300 group-focus-within:text-exquisite-gold transition-colors" />
                             </div>
                             <textarea
                                 rows="5"
-                                placeholder="Whisper the essence of your celebration to your guests..."
+                                placeholder="Tell your guests about the celebration..."
                                 className="block w-full pl-16 pr-6 py-5 bg-transparent border-2 border-slate-50 dark:border-white/5 rounded-2xl text-slate-900 dark:text-white focus:outline-none focus:border-exquisite-gold/30 transition-all font-bold placeholder-slate-300 dark:placeholder-slate-700 resize-none"
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -134,7 +134,7 @@ const CreateEvent = () => {
                                 <Loader2 className="h-6 w-6 animate-spin" />
                             ) : (
                                 <>
-                                    <span>Curate Event</span>
+                                    <span>Create Event</span>
                                     <ArrowRight className="h-5 w-5" />
                                 </>
                             )}

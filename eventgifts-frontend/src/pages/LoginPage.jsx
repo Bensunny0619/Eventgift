@@ -41,8 +41,8 @@ const LoginPage = () => {
                         <div className="inline-flex h-14 w-14 sm:h-16 sm:w-16 gold-gradient rounded-2xl items-center justify-center shadow-xl shadow-exquisite-gold/20 mb-6 sm:mb-8 transform hover:rotate-12 transition-transform cursor-pointer">
                             <Diamond className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                         </div>
-                        <h1 className="text-3xl sm:text-5xl font-serif text-slate-900 dark:text-white mb-4 italic">Welcome back</h1>
-                        <p className="text-sm sm:base text-slate-500 font-medium">Continue your journey with Homa.</p>
+                        <h1 className="text-3xl sm:text-5xl font-serif text-slate-900 dark:text-white mb-4">Welcome back</h1>
+                        <p className="text-sm sm:base text-slate-500 font-medium">Log in to your Eventgift account.</p>
                     </div>
 
                     {error && (
@@ -73,7 +73,7 @@ const LoginPage = () => {
 
                             <div className="relative group">
                                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 absolute -top-2.5 left-5 px-2 bg-white dark:bg-slate-900 transition-colors group-focus-within:text-exquisite-gold">
-                                    Secure Password
+                                    Password
                                 </label>
                                 <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
                                     <Lock className="h-5 w-5 text-slate-300 group-focus-within:text-exquisite-gold transition-colors" />
@@ -93,9 +93,9 @@ const LoginPage = () => {
                         <div className="flex items-center justify-between px-2">
                             <div className="flex items-center space-x-3">
                                 <input type="checkbox" id="remember" className="h-5 w-5 rounded-lg border-2 border-slate-200 dark:border-white/10" />
-                                <label htmlFor="remember" className="text-sm font-bold text-slate-500 cursor-pointer">Remember access</label>
+                                <label htmlFor="remember" className="text-sm font-bold text-slate-500 cursor-pointer">Remember me</label>
                             </div>
-                            <Link to="#" className="text-sm font-bold text-exquisite-gold hover:underline">Forgot secrets?</Link>
+                            <Link to="#" className="text-sm font-bold text-exquisite-gold hover:underline">Forgot password?</Link>
                         </div>
 
                         <button
@@ -107,7 +107,7 @@ const LoginPage = () => {
                                 <Loader2 className="h-6 w-6 animate-spin" />
                             ) : (
                                 <>
-                                    <span>Initiate Session</span>
+                                    <span>Login</span>
                                     <ArrowRight className="h-5 w-5" />
                                 </>
                             )}
@@ -117,7 +117,7 @@ const LoginPage = () => {
                     <div className="mt-12 text-center">
                         <p className="text-slate-500 font-bold">
                             Don't have an account? {' '}
-                            <Link to="/register" className="text-exquisite-gold hover:underline">Apply for Membership</Link>
+                            <Link to="/register" className="text-exquisite-gold hover:underline">Sign up here</Link>
                         </p>
                     </div>
                 </div>

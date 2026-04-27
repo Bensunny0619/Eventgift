@@ -98,9 +98,9 @@ const Dashboard = () => {
                             <div className="exquisite-card p-20 text-center flex flex-col items-center">
                                 <Sparkles className="h-16 w-16 text-exquisite-gold/30 mb-6" />
                                 <h3 className="text-2xl font-serif text-slate-900 dark:text-white mb-2">No active events</h3>
-                                <p className="text-slate-500 max-w-sm mb-8">It's time to curate your next masterpiece. Start by creating a new event registry.</p>
+                                <p className="text-slate-500 max-w-sm mb-8">Ready to start? Create a new event and add gifts to your registry.</p>
                                 <Link to="/events/create" className="px-10 py-4 gold-gradient text-white font-bold rounded-2xl shadow-xl shadow-exquisite-gold/20 hover:scale-105 transition-all">
-                                    Initiate Event
+                                    Create Event
                                 </Link>
                             </div>
                         ) : (
@@ -187,8 +187,8 @@ const Dashboard = () => {
                 {/* Sidebar: The Gift Concierge */}
                 <div className="space-y-8">
                     <div className="px-2">
-                        <h2 className="text-3xl font-serif text-slate-900 dark:text-white">The Gift Service</h2>
-                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mt-2">Curated selections for your guests</p>
+                        <h2 className="text-3xl font-serif text-slate-900 dark:text-white">Suggested Gifts</h2>
+                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mt-2">Popular items for your registry</p>
                     </div>
 
                     <div className="exquisite-card p-10 space-y-8">
@@ -206,7 +206,7 @@ const Dashboard = () => {
                             </div>
                             <button className="w-full py-4 bg-exquisite-gold/10 text-exquisite-gold hover:bg-exquisite-gold hover:text-white rounded-2xl font-bold transition-all flex items-center justify-center space-x-2">
                                 <Plus className="h-5 w-5" />
-                                <span>Add to Suite</span>
+                                <span>Add to Registry</span>
                             </button>
                         </div>
 

@@ -46,9 +46,9 @@ const Events = () => {
             {/* Header Area */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 px-2">
                 <div>
-                    <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-white">Elite Events</h1>
+                    <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-white">My Events</h1>
                     <p className="text-slate-500 dark:text-slate-400 mt-4 text-lg font-medium max-w-2xl">
-                        A curated history of your exclusive gatherings and upcoming distinguished celebrations.
+                        Your list of upcoming and past events.
                     </p>
                 </div>
                 <Link to="/events/create" className="inline-flex items-center justify-center space-x-3 px-10 py-5 gold-gradient text-white font-bold rounded-2xl shadow-xl shadow-exquisite-gold/20 hover:scale-[1.02] transform transition-all group">
@@ -65,7 +65,7 @@ const Events = () => {
                     </div>
                     <input
                         type="text"
-                        placeholder="Search your exquisite collection..."
+                        placeholder="Search your events..."
                         className="block w-full pl-16 pr-6 py-5 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-[2rem] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-exquisite-gold/20 transition-all font-medium shadow-sm"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -83,9 +83,9 @@ const Events = () => {
                     <div className="exquisite-card p-20 text-center flex flex-col items-center">
                         <Calendar className="h-16 w-16 text-exquisite-gold/30 mb-6" />
                         <h3 className="text-2xl font-serif text-slate-900 dark:text-white mb-2">No events found</h3>
-                        <p className="text-slate-500 max-w-sm mb-8">Refine your search or start curating a new masterpiece for your distinguished guests.</p>
+                        <p className="text-slate-500 max-w-sm mb-8">Try a different search or create a new event for your guests.</p>
                         <Link to="/events/create" className="px-10 py-4 gold-gradient text-white font-bold rounded-2xl shadow-xl shadow-exquisite-gold/20 hover:scale-105 transition-all">
-                            Initiate Event
+                            Create Event
                         </Link>
                     </div>
                 ) : (
@@ -156,7 +156,7 @@ const Events = () => {
                                         to={`/events/${event.id}`}
                                         className="w-full sm:w-auto px-12 py-5 border border-slate-200 dark:border-white/10 rounded-2xl text-center font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 transition-all uppercase text-[10px] tracking-[0.2em]"
                                     >
-                                        Management Suite
+                                        Manage Event
                                     </Link>
                                     <Link
                                         to={`/registry/${event.id}`}

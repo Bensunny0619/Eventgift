@@ -55,9 +55,9 @@ const Guests = () => {
             {/* Header Area */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 px-2">
                 <div>
-                    <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-white italic">Distinguished Guests</h1>
+                    <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-white">Guest Management</h1>
                     <p className="text-slate-500 dark:text-slate-400 mt-4 text-lg font-medium max-w-2xl">
-                        Manage your exclusive guest lists and track RSVPs across all your masterpiece events.
+                        Manage your guest lists and track RSVPs for all your events.
                     </p>
                 </div>
                 <button className="flex items-center justify-center space-x-3 px-8 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold shadow-2xl hover:scale-[1.02] transition-all group shrink-0">
@@ -122,8 +122,8 @@ const Guests = () => {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="border-b border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/[0.02]">
-                                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Guest Identity</th>
-                                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Distinguished Event</th>
+                                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Guest</th>
+                                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Event</th>
                                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Status</th>
                                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400 text-right">Actions</th>
                             </tr>
