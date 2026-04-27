@@ -56,32 +56,32 @@ const LandingPage = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
                         {[
                             {
-                                icon: <Diamond className="h-8 w-8 text-exquisite-gold" />,
+                                icon: <Diamond className="h-8 w-8 text-exquisite-gold group-hover:text-white transition-colors duration-500" />,
                                 title: "Smart Registry",
                                 desc: "Dynamic item management with seamless partial contribution support for high-value acquisitions."
                             },
                             {
-                                icon: <ShieldCheck className="h-8 w-8 text-exquisite-gold" />,
+                                icon: <ShieldCheck className="h-8 w-8 text-exquisite-gold group-hover:text-white transition-colors duration-500" />,
                                 title: "Secure Pledges",
                                 desc: "Elite verification protocol ensures every contribution is accounted for and authenticated."
                             },
                             {
-                                icon: <Video className="h-8 w-8 text-exquisite-gold" />,
+                                icon: <Video className="h-8 w-8 text-exquisite-gold group-hover:text-white transition-colors duration-500" />,
                                 title: "Gratitude Hub",
                                 desc: "Elevate your 'thank you' with high-definition video messages delivered straight to your guests."
                             },
                             {
-                                icon: <Heart className="h-8 w-8 text-exquisite-gold" />,
+                                icon: <Heart className="h-8 w-8 text-exquisite-gold group-hover:text-white transition-colors duration-500" />,
                                 title: "Gift Service",
                                 desc: "Curated gift selections and personalized assistance for your guests, 24/7."
                             }
                         ].map((feature, i) => (
-                            <div key={i} className="group space-y-8 p-10 exquisite-card hover:translate-y-[-10px] transition-all duration-500">
-                                <div className="h-16 w-16 bg-exquisite-cream dark:bg-white/5 rounded-2xl flex items-center justify-center border border-slate-100 dark:border-white/10 group-hover:bg-exquisite-gold group-hover:text-white transition-colors">
+                            <div key={i} className="group space-y-8 p-10 exquisite-card hover:translate-y-[-15px] hover:shadow-2xl hover:shadow-exquisite-gold/30 transition-all duration-500">
+                                <div className="h-16 w-16 bg-exquisite-cream dark:bg-white/5 rounded-2xl flex items-center justify-center border border-slate-100 dark:border-white/10 group-hover:gold-gradient group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 shadow-lg group-hover:shadow-exquisite-gold/20">
                                     {feature.icon}
                                 </div>
-                                <h3 className="text-2xl font-serif">{feature.title}</h3>
-                                <p className="text-slate-500 dark:text-slate-400 leading-relaxed font-medium">{feature.desc}</p>
+                                <h3 className="text-2xl font-serif group-hover:text-exquisite-gold transition-colors duration-500">{feature.title}</h3>
+                                <p className="text-slate-500 dark:text-slate-400 leading-relaxed font-medium group-hover:text-slate-900 dark:group-hover:text-white/80 transition-colors duration-500">{feature.desc}</p>
                             </div>
                         ))}
                     </div>

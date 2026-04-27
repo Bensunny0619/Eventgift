@@ -125,16 +125,28 @@ const Events = () => {
 
                                     <div className="grid grid-cols-3 gap-8 py-8 border-t border-slate-100 dark:border-white/5">
                                         <div>
-                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Guests</p>
-                                            <p className="text-2xl font-serif text-slate-900 dark:text-white">124</p>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Registry</p>
+                                            <p className="text-2xl font-serif text-slate-900 dark:text-white">
+                                                {(() => {
+                                                    const total = event.registry_items?.reduce((sum, item) => sum + parseFloat(item.price || 0), 0) || 0;
+                                                    const raised = event.registry_items?.reduce((sum, item) => sum + parseFloat(item.amount_raised || 0), 0) || 0;
+                                                    return total > 0 ? `${Math.round((raised / total) * 100)}%` : '0%';
+                                                })()}
+                                            </p>
                                         </div>
                                         <div>
-                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Registry</p>
-                                            <p className="text-2xl font-serif text-slate-900 dark:text-white">85%</p>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Items</p>
+                                            <p className="text-2xl font-serif text-slate-900 dark:text-white">{event.registry_items?.length || 0}</p>
                                         </div>
                                         <div>
                                             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Days Left</p>
-                                            <p className="text-2xl font-serif text-slate-900 dark:text-white">12</p>
+                                            <p className="text-2xl font-serif text-slate-900 dark:text-white">
+                                                {(() => {
+                                                    const diff = new Date(event.date) - new Date();
+                                                    const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                                                    return days > 0 ? days : 0;
+                                                })()}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>

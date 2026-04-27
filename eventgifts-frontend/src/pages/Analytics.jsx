@@ -1,4 +1,5 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
+import api from '../api/api';
 import { 
     BarChart3, 
     TrendingUp, 
@@ -10,22 +11,57 @@ import {
     Star,
     Calendar,
     ChevronRight,
-    Search
+    Search,
+    Loader2
 } from 'lucide-react';
 
 const Analytics = () => {
+    const [events, setEvents] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        api.get('/events')
+            .then(res => setEvents(res.data))
+            .catch(err => console.error('Failed to fetch analytics data', err))
+            .finally(() => setIsLoading(false));
+    }, []);
+
+    const totalRevenue = events.reduce((acc, event) => {
+        return acc + (event.registry_items?.reduce((sum, item) => sum + parseFloat(item.amount_raised || 0), 0) || 0);
+    }, 0);
+
+    const totalGoal = events.reduce((acc, event) => {
+        return acc + (event.registry_items?.reduce((sum, item) => sum + parseFloat(item.price || 0), 0) || 0);
+    }, 0);
+
+    const engagementRate = totalGoal > 0 ? Math.round((totalRevenue / totalGoal) * 100) : 0;
+
+    const popularGifts = events
+        .flatMap(e => e.registry_items || [])
+        .filter(item => parseFloat(item.amount_raised) > 0)
+        .sort((a, b) => (b.amount_raised || 0) - (a.amount_raised || 0))
+        .slice(0, 3)
+        .map(item => ({
+            name: item.title,
+            category: item.type || 'Gift',
+            sales: item.contributions?.length || 0,
+            growth: '+0%'
+        }));
+
     const kpis = [
-        { label: 'Total Revenue', value: '$124,500', change: '+12.5%', trend: 'up', icon: DollarSign },
-        { label: 'Guest Engagement', value: '84%', change: '+5.2%', trend: 'up', icon: Users },
-        { label: 'Gift Suite Value', value: '$42,800', change: '-2.1%', trend: 'down', icon: Gift },
-        { label: 'Active Events', value: '18', change: '+3', trend: 'up', icon: Calendar },
+        { label: 'Total Revenue', value: `$${totalRevenue.toLocaleString()}`, change: totalRevenue > 0 ? '+100%' : '0%', trend: 'up', icon: DollarSign },
+        { label: 'Guest Engagement', value: `${engagementRate}%`, change: engagementRate > 0 ? '+5.2%' : '0%', trend: 'up', icon: Users },
+        { label: 'Gift Suite Items', value: events.reduce((acc, e) => acc + (e.registry_items?.length || 0), 0), change: '0%', trend: 'up', icon: Gift },
+        { label: 'Active Events', value: events.length, change: events.length > 0 ? `+${events.length}` : '0', trend: 'up', icon: Calendar },
     ];
 
-    const popularGifts = [
-        { name: 'Royal Heritage Chronograph', category: 'Royal Heritage', sales: 42, growth: '+15%' },
-        { name: 'Midnight Velvet Suite', category: 'Modern Luxe', sales: 38, growth: '+8%' },
-        { name: 'Aurelia Crystal Decanter', category: 'Modern Luxe', sales: 31, growth: '+12%' },
-    ];
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <Loader2 className="h-10 w-10 text-exquisite-gold animate-spin" />
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-12">
@@ -104,20 +140,27 @@ const Analytics = () => {
                 <div className="exquisite-card p-8 flex flex-col">
                     <h3 className="text-2xl font-serif text-slate-900 dark:text-white mb-8">Gift Excellence</h3>
                     <div className="space-y-6 flex-grow">
-                        {popularGifts.map((gift, i) => (
-                            <div key={i} className="group p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-white/5 transition-all border border-transparent hover:border-slate-100 dark:hover:border-white/5">
-                                <div className="flex items-start justify-between">
-                                    <div>
-                                        <h4 className="font-bold text-slate-900 dark:text-white mb-1 group-hover:text-exquisite-gold transition-colors">{gift.name}</h4>
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{gift.category}</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="font-serif text-slate-900 dark:text-white">{gift.sales} Sales</p>
-                                        <p className="text-[10px] font-black text-emerald-500">{gift.growth} ↑</p>
+                        {popularGifts.length === 0 ? (
+                            <div className="py-12 text-center">
+                                <Gift className="h-12 w-12 text-slate-200 dark:text-white/5 mx-auto mb-4" />
+                                <p className="text-slate-400 text-xs font-medium italic">Await your first contributions</p>
+                            </div>
+                        ) : (
+                            popularGifts.map((gift, i) => (
+                                <div key={i} className="group p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-white/5 transition-all border border-transparent hover:border-slate-100 dark:hover:border-white/5">
+                                    <div className="flex items-start justify-between">
+                                        <div>
+                                            <h4 className="font-bold text-slate-900 dark:text-white mb-1 group-hover:text-exquisite-gold transition-colors">{gift.name}</h4>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{gift.category}</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="font-serif text-slate-900 dark:text-white">{gift.sales} Sales</p>
+                                            <p className="text-[10px] font-black text-emerald-500">{gift.growth} ↑</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                        )}
                     </div>
                     <button className="mt-8 w-full py-4 border-2 border-slate-100 dark:border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 dark:hover:text-white hover:border-exquisite-gold transition-all">
                         View Complete Catalog
@@ -133,12 +176,18 @@ const Analytics = () => {
                         <TrendingUp className="h-6 w-6 text-exquisite-gold" />
                         <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Success Analytics</span>
                     </div>
-                    <h2 className="text-4xl font-serif mb-6 leading-tight italic">Distinguished events often see a <span className="text-exquisite-gold">22% higher</span> engagement rate than standard gatherings.</h2>
+                    <h2 className="text-4xl font-serif mb-6 leading-tight italic">
+                        {engagementRate > 0 ? (
+                            <>Your distinguished events see a <span className="text-exquisite-gold">{engagementRate}%</span> engagement rate.</>
+                        ) : (
+                            <>Curate your first event to begin savouring <span className="text-exquisite-gold">exquisite engagement</span> analytics.</>
+                        )}
+                    </h2>
                     <p className="text-sm font-medium opacity-60 leading-relaxed">Our predictive algorithms suggest that continuing your current curation strategy will lead to significant growth in your host prestige score.</p>
                 </div>
                 <div className="relative z-10 flex flex-col items-center justify-center p-12 exquisite-card border-none bg-white/10 dark:bg-slate-900/10 backdrop-blur-xl">
                     <div className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-2">Host Prestige Rating</div>
-                    <div className="text-7xl font-serif text-exquisite-gold mb-4 italic">Diamond</div>
+                    <div className="text-7xl font-serif text-exquisite-gold mb-4 italic">{engagementRate > 50 ? 'Diamond' : 'Elite'}</div>
                     <div className="flex space-x-1">
                         {[...Array(5)].map((_, i) => <Star key={i} className="h-4 w-4 fill-exquisite-gold text-exquisite-gold shadow-lg" />)}
                     </div>

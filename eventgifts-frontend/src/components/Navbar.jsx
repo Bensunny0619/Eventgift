@@ -82,7 +82,6 @@ const Navbar = ({ toggleSidebar, isDashboard, isSidebarOpen }) => {
                                 <div className="flex items-center space-x-4 pl-2 group cursor-pointer relative">
                                     <div className="text-right hidden sm:block">
                                         <p className="text-sm font-bold text-slate-900 dark:text-white leading-tight">{user.name}</p>
-                                        <p className="text-[10px] font-black uppercase text-exquisite-gold tracking-widest">Gold Tier Member</p>
                                     </div>
                                     <div className="h-12 w-12 rounded-2xl bg-exquisite-gold/10 border border-exquisite-gold/20 p-1">
                                         <div className="h-full w-full bg-slate-200 dark:bg-slate-700 rounded-xl overflow-hidden">

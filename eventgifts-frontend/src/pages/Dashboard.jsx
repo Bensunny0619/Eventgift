@@ -29,6 +29,16 @@ const Dashboard = () => {
             .finally(() => setIsLoading(false));
     }, []);
 
+    const totalRaised = events.reduce((acc, event) => {
+        const eventTotal = event.registry_items?.reduce((sum, item) => sum + parseFloat(item.amount_raised || 0), 0) || 0;
+        return acc + eventTotal;
+    }, 0);
+
+    const totalContributors = events.reduce((acc, event) => {
+        const eventContributors = event.registry_items?.reduce((sum, item) => sum + (item.contributions?.length || 0), 0) || 0;
+        return acc + eventContributors;
+    }, 0);
+
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
@@ -45,26 +55,25 @@ const Dashboard = () => {
                 <StatCard
                     label="Active Events"
                     value={events.length < 10 ? `0${events.length}` : events.length}
-                    trend="+12.5%"
+                    trend={events.length > 0 ? "+100%" : "0%"}
                     icon={Sparkles}
                 />
                 <StatCard
-                    label="Confirmed RSVPs"
-                    value="1,248"
-                    trend="+4.2%"
+                    label="Guest Contributors"
+                    value={totalContributors.toLocaleString()}
+                    trend="0%"
                     icon={Users}
-                // color="dark"
                 />
                 <StatCard
                     label="Gift Valuations"
-                    value="$245.2k"
-                    badge="New Milestone"
+                    value={`$${(totalRaised / 1000).toFixed(1)}k`}
+                    badge={totalRaised > 0 ? "New Milestone" : "Awaiting Gifts"}
                     icon={Gift}
                 />
                 <StatCard
                     label="Elite Hosts Rank"
-                    value="#04"
-                    badge="Steady"
+                    value={events.length > 0 ? `#${Math.max(1, 10 - events.length)}` : "None"}
+                    badge="Developing"
                     icon={Trophy}
                 />
             </div>
@@ -118,11 +127,12 @@ const Dashboard = () => {
                                                     {new Date(event.date).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
                                                 </span>
                                                 <div className="flex -space-x-2">
-                                                    {[1, 2, 3].map(i => (
+                                                    {/* Using placeholders for avatar icons, but showing actual contributor count if available */}
+                                                    {[...Array(Math.min(3, event.registry_items?.reduce((sum, i) => sum + (i.contributions?.length || 0), 0) || 0))].map((_, i) => (
                                                         <div key={i} className="h-8 w-8 rounded-full border-2 border-white dark:border-slate-800 bg-slate-300"></div>
                                                     ))}
                                                     <div className="h-8 w-8 rounded-full border-2 border-white dark:border-slate-800 bg-exquisite-cream flex items-center justify-center text-[10px] font-black text-slate-500">
-                                                        +42
+                                                        +{event.registry_items?.reduce((sum, i) => sum + (i.contributions?.length || 0), 0) || 0}
                                                     </div>
                                                 </div>
                                             </div>
@@ -133,11 +143,23 @@ const Dashboard = () => {
                                             </p>
 
                                             <div className="flex items-center space-x-2 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 justify-between">
-                                                <span>Guest Attendance</span>
-                                                <span className="text-slate-900 dark:text-white">85% Capacity</span>
+                                                <span>Registry Fulfillment</span>
+                                                <span className="text-slate-900 dark:text-white">
+                                                    {(() => {
+                                                        const total = event.registry_items?.reduce((sum, item) => sum + parseFloat(item.price || 0), 0) || 0;
+                                                        const raised = event.registry_items?.reduce((sum, item) => sum + parseFloat(item.amount_raised || 0), 0) || 0;
+                                                        return total > 0 ? `${Math.round((raised / total) * 100)}%` : '0%';
+                                                    })()}
+                                                </span>
                                             </div>
                                             <div className="h-1 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden mb-8">
-                                                <div className="h-full exquisite-gold transition-all duration-1000" style={{ width: '85%' }}></div>
+                                                <div className="h-full bg-exquisite-gold transition-all duration-1000" style={{ 
+                                                    width: (() => {
+                                                        const total = event.registry_items?.reduce((sum, item) => sum + parseFloat(item.price || 0), 0) || 0;
+                                                        const raised = event.registry_items?.reduce((sum, item) => sum + parseFloat(item.amount_raised || 0), 0) || 0;
+                                                        return total > 0 ? `${Math.round((raised / total) * 100)}%` : '0%';
+                                                    })()
+                                                }}></div>
                                             </div>
                                         </div>
 
