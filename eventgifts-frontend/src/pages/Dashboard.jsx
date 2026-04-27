@@ -172,7 +172,7 @@ const Dashboard = () => {
                                             </Link>
                                             <Link
                                                 to={`/events/${event.id}/edit`}
-                                                className="w-full sm:flex-grow py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl text-center font-bold hover:scale-105 transition-all uppercase text-[10px] tracking-[0.2em]"
+                                                className="w-full sm:flex-grow py-4 bg-slate-900 dark:bg-exquisite-gold text-white dark:text-slate-900 rounded-2xl text-center font-bold hover:scale-105 transition-all uppercase text-[10px] tracking-[0.15em] shadow-lg shadow-exquisite-gold/5"
                                             >
                                                 Edit Details
                                             </Link>
