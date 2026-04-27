@@ -12,7 +12,7 @@ class EventController extends Controller
 {
     public function index()
     {
-        return response()->json(Auth::user()->events()->with('registryItems')->get());
+        return response()->json(Auth::user()->events()->with('registryItems.contributions')->get());
     }
 
     public function store(Request $request)
@@ -38,12 +38,12 @@ class EventController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        return response()->json($event->load('registryItems'));
+        return response()->json($event->load(['registryItems.contributions', 'host']));
     }
 
     public function publicShow(Event $event)
     {
-        return response()->json($event->load('registryItems'));
+        return response()->json($event->load(['registryItems', 'host']));
     }
 
     public function update(Request $request, Event $event)

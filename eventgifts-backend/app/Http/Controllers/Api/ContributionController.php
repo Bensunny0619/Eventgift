@@ -38,9 +38,9 @@ class ContributionController extends Controller
 
     public function verify(Contribution $contribution)
     {
-        $reference = request('transaction_reference');
+        $reference = request('transaction_reference', $contribution->transaction_reference);
         
-        if ($contribution->transaction_reference !== $reference) {
+        if (!$reference || $contribution->transaction_reference !== $reference) {
             return response()->json(['message' => 'Invalid reference'], 422);
         }
 
@@ -48,8 +48,8 @@ class ContributionController extends Controller
         $isVerified = $paymentService->verifyReference($reference);
 
         if ($isVerified) {
-            $contribution->update(['status' => 'verified']);
-            $contribution->registryItem->increment('amount_raised', $contribution->amount);
+            $contribution->update(['status' => 'paid']);
+            $contribution->registryItem()->increment('amount_raised', $contribution->amount);
             return response()->json(['message' => 'Verification successful', 'contribution' => $contribution->load('thankYouVideo')]);
         }
 

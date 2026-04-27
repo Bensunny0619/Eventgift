@@ -19,12 +19,13 @@ use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\RegistryItemController;
 use App\Http\Controllers\Api\ContributionController;
 use App\Http\Controllers\Api\ThankYouVideoController;
+use App\Http\Controllers\Api\GuestController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 // Guest and Public Routes
-Route::post('/contributions', [ContributionController::class, 'store']);
+Route::post('/registry-items/{item}/contribute', [ContributionController::class, 'store']);
 Route::post('/contributions/search', [ContributionController::class, 'search']);
 Route::post('/contributions/{contribution}/verify', [ContributionController::class, 'verify']);
 Route::get('/contributions/{contribution}/thank-you', [ThankYouVideoController::class, 'show']);
@@ -34,6 +35,7 @@ Route::get('/events/{event}/public', [EventController::class, 'publicShow']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::put('/profile', [AuthController::class, 'updateProfile']);
     
     Route::apiResource('events', EventController::class);
 
@@ -45,4 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Host specific actions
     Route::post('/contributions/{contribution}/thank-you', [ThankYouVideoController::class, 'store']);
+
+    // Guest management
+    Route::apiResource('guests', GuestController::class)->except(['show']);
 });
