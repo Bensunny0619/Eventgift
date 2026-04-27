@@ -68,7 +68,7 @@ const AddItemModal = ({ isOpen, onClose, eventId, onItemAdded }) => {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-2">Price ($)</label>
+                                <label className="block text-sm font-bold text-slate-700 mb-2">Price (₦)</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                         <DollarSign className="h-5 w-5 text-primary-500" />
@@ -77,7 +77,7 @@ const AddItemModal = ({ isOpen, onClose, eventId, onItemAdded }) => {
                                         type="number"
                                         step="0.01"
                                         required
-                                        placeholder="250.00"
+                                        placeholder="50,000"
                                         className="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all font-medium"
                                         value={formData.price}
                                         onChange={(e) => setFormData({ ...formData, price: e.target.value })}

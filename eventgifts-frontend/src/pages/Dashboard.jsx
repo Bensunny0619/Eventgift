@@ -66,12 +66,12 @@ const Dashboard = () => {
                 />
                 <StatCard
                     label="Gift Valuations"
-                    value={`$${(totalRaised / 1000).toFixed(1)}k`}
+                    value={`₦${(totalRaised / 1000).toFixed(1)}k`}
                     badge={totalRaised > 0 ? "New Milestone" : "Awaiting Gifts"}
                     icon={Gift}
                 />
                 <StatCard
-                    label="Elite Hosts Rank"
+                    label="Event Host Rank"
                     value={events.length > 0 ? `#${Math.max(1, 10 - events.length)}` : "None"}
                     badge="Developing"
                     icon={Trophy}
@@ -84,8 +84,8 @@ const Dashboard = () => {
                 <div className="lg:col-span-2 space-y-8">
                     <div className="flex items-end justify-between px-2">
                         <div>
-                            <h2 className="text-4xl font-serif text-slate-900 dark:text-white">Active Invitations</h2>
-                            <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium">Manage your upcoming exclusive gatherings</p>
+                            <h2 className="text-4xl font-serif text-slate-900 dark:text-white">Your Events</h2>
+                            <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium">Manage your upcoming events and registries</p>
                         </div>
                         <Link to="/events" className="flex items-center space-x-2 text-[10px] font-black uppercase tracking-[0.2em] text-exquisite-gold hover:text-exquisite-midnight dark:hover:text-white transition-colors">
                             <span>View All Events</span>
@@ -201,8 +201,8 @@ const Dashboard = () => {
                                 </div>
                             </div>
                             <div>
-                                <h4 className="text-2xl font-serif text-slate-900 dark:text-white leading-tight">Royal Heritage Chronograph</h4>
-                                <p className="text-slate-500 mt-1 font-medium italic">$18,500 / Unit</p>
+                                <h4 className="text-2xl font-serif text-slate-900 dark:text-white leading-tight">Samsung Double Door Fridge</h4>
+                                <p className="text-slate-500 mt-1 font-medium italic">₦850,000 / Unit</p>
                             </div>
                             <button className="w-full py-4 bg-exquisite-gold/10 text-exquisite-gold hover:bg-exquisite-gold hover:text-white rounded-2xl font-bold transition-all flex items-center justify-center space-x-2">
                                 <Plus className="h-5 w-5" />

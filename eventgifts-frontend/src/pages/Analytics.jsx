@@ -5,7 +5,7 @@ import {
     TrendingUp, 
     Users, 
     Gift, 
-    DollarSign, 
+    Banknote, 
     ArrowUpRight, 
     ArrowDownRight,
     Star,
@@ -49,7 +49,7 @@ const Analytics = () => {
         }));
 
     const kpis = [
-        { label: 'Total Revenue', value: `$${totalRevenue.toLocaleString()}`, change: totalRevenue > 0 ? '+100%' : '0%', trend: 'up', icon: DollarSign },
+        { label: 'Total Revenue', value: `₦${totalRevenue.toLocaleString()}`, change: totalRevenue > 0 ? '+100%' : '0%', trend: 'up', icon: Banknote },
         { label: 'Guest Engagement', value: `${engagementRate}%`, change: engagementRate > 0 ? '+5.2%' : '0%', trend: 'up', icon: Users },
         { label: 'Gift Suite Items', value: events.reduce((acc, e) => acc + (e.registry_items?.length || 0), 0), change: '0%', trend: 'up', icon: Gift },
         { label: 'Active Events', value: events.length, change: events.length > 0 ? `+${events.length}` : '0', trend: 'up', icon: Calendar },
@@ -118,8 +118,8 @@ const Analytics = () => {
                         {/* Chart Bars */}
                         {[45, 62, 58, 75, 90, 82, 95].map((height, i) => (
                             <div key={i} className="w-12 group relative flex flex-col justify-end">
-                                <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-black py-1 px-3 rounded-full shadow-xl z-20">
-                                    ${height}k
+                                <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-black py-1 px-3 rounded-full shadow-xl z-20 whitespace-nowrap">
+                                    ₦{height}k
                                 </div>
                                 <div 
                                     className="w-full bg-slate-900/5 dark:bg-white/5 rounded-t-xl overflow-hidden relative group-hover:bg-slate-900/10 dark:group-hover:bg-white/10 transition-all duration-500"

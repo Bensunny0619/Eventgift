@@ -18,59 +18,59 @@ const GiftSuite = () => {
 
     const categories = [
         'All Collections',
-        'Royal Heritage',
-        'Modern Luxe',
-        'Technological Marvels',
-        'Exquisite Experiences'
+        'Home & Kitchen',
+        'Fashion & Style',
+        'Cash Gifts',
+        'Luxury Items'
     ];
 
     const giftItems = [
         {
             id: 1,
-            name: 'Royal Heritage Chronograph',
-            price: '$18,500',
-            category: 'Royal Heritage',
-            description: 'A masterpiece of Swiss engineering, featuring 18k rose gold.',
+            name: 'Samsung Double Door Fridge',
+            price: '₦850,000',
+            category: 'Home & Kitchen',
+            description: 'Premium cooling technology for a modern home.',
             image: null
         },
         {
             id: 2,
-            name: 'Midnight Velvet Suite',
-            price: '$4,200',
-            category: 'Modern Luxe',
-            description: 'Hand-woven Italian silk bedding set in deep obsidian.',
+            name: 'Hand-Woven Luxury Aso-Oke',
+            price: '₦125,000',
+            category: 'Fashion & Style',
+            description: 'Custom-made traditional attire for distinguished guests.',
             image: null
         },
         {
             id: 3,
-            name: 'Aurelia Crystal Decanter',
-            price: '$2,850',
-            category: 'Modern Luxe',
-            description: 'Hand-blown lead crystal with 24k gold leaf inlay.',
+            name: 'Premium Dinnerware Set',
+            price: '₦75,000',
+            category: 'Home & Kitchen',
+            description: 'Elegant porcelain set for refined hosting.',
             image: null
         },
         {
             id: 4,
-            name: 'Neural Sound Horizon',
-            price: '$3,100',
-            category: 'Technological Marvels',
-            description: 'Adaptive audio sculpture with ceramic acoustics.',
+            name: 'Cash Gift (Couple\'s Support)',
+            price: '₦50,000',
+            category: 'Cash Gifts',
+            description: 'Financial support for the couple\'s new journey.',
             image: null
         },
         {
             id: 5,
-            name: 'Safari Estate Weekend',
-            price: '$25,000',
-            category: 'Exquisite Experiences',
-            description: 'Private 3-day retreat in a curated conservatory.',
+            name: 'Designer Italian Leather Bag',
+            price: '₦220,000',
+            category: 'Luxury Items',
+            description: 'Exquisite accessory for the distinguished host.',
             image: null
         },
         {
             id: 6,
-            name: 'Celestial Compass',
-            price: '$1,200',
-            category: 'Royal Heritage',
-            description: 'Antiqued brass navigation tool with diamond-encrusted dial.',
+            name: 'Gold Jewelry Collection',
+            price: '₦450,000',
+            category: 'Luxury Items',
+            description: 'Authentic 18k gold set including necklace and earrings.',
             image: null
         }
     ];
@@ -97,9 +97,9 @@ const GiftSuite = () => {
             {/* Header Area */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 px-2">
                 <div>
-                    <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-white italic">The Gift Suite</h1>
+                    <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-white">The Gift Suite</h1>
                     <p className="text-slate-500 dark:text-slate-400 mt-4 text-lg font-medium max-w-2xl">
-                        Curate your event's legacy with our hand-picked selection of distinguished gifts.
+                        Select beautiful gifts for your event from our curated local and international collections.
                     </p>
                 </div>
                 <div className="flex items-center space-x-4">

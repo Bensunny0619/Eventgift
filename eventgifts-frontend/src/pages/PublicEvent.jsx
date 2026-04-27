@@ -69,8 +69,8 @@ const PublicEvent = () => {
                                 <Diamond className="h-3.5 w-3.5 text-exquisite-gold" />
                                 <span className="text-[9px] font-black uppercase tracking-[0.3em] text-exquisite-gold">Exquisite Light Registry</span>
                             </div>
-                            <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif leading-tight">Exquisite Smart Registry</h1>
-                            <p className="text-lg sm:text-xl text-slate-500 dark:text-slate-400 font-medium italic">Curated luxury gifting for your most precious moments.</p>
+                            <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif leading-tight">Event Gift Registry</h1>
+                            <p className="text-lg sm:text-xl text-slate-500 dark:text-slate-400 font-medium italic">Support our celebration with a gift from our registry.</p>
                         </div>
 
                         <div className="flex items-center space-x-6">
@@ -153,7 +153,7 @@ const PublicEvent = () => {
                                     <div className="p-10 space-y-8">
                                         <div className="space-y-4">
                                             <h3 className="text-3xl font-serif text-slate-900 dark:text-white leading-tight">{item.title}</h3>
-                                            <p className="text-2xl font-serif text-exquisite-gold">${parseFloat(item.price).toLocaleString()}</p>
+                                            <p className="text-2xl font-serif text-exquisite-gold">₦{parseFloat(item.price).toLocaleString()}</p>
                                             <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed italic line-clamp-2">
                                                 {item.description || 'Iconic French craftsmanship with exquisite details for your most precious moments.'}
                                             </p>
@@ -171,7 +171,7 @@ const PublicEvent = () => {
                                                 ></div>
                                             </div>
                                             <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">
-                                                <span>${parseFloat(item.amount_raised).toLocaleString()} pledged of ${parseFloat(item.price).toLocaleString()}</span>
+                                                <span>₦{parseFloat(item.amount_raised).toLocaleString()} pledged of ₦{parseFloat(item.price).toLocaleString()}</span>
                                                 {isFulfilled && <span className="text-emerald-500 font-bold">Fully funded</span>}
                                             </div>
                                         </div>

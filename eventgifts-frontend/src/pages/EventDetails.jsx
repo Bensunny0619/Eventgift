@@ -128,7 +128,7 @@ const EventDetails = () => {
                                     <div className="flex items-center justify-between mb-4">
                                         <span className="text-slate-500 text-sm font-medium">Progress</span>
                                         <span className="text-primary-600 font-bold text-sm">
-                                            ${parseFloat(item.amount_raised).toFixed(2)} / ${parseFloat(item.price).toFixed(2)}
+                                            ₦{parseFloat(item.amount_raised).toLocaleString()} / ₦{parseFloat(item.price).toLocaleString()}
                                         </span>
                                     </div>
                                     <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
@@ -151,13 +151,13 @@ const EventDetails = () => {
                             <div className="flex items-center justify-between">
                                 <span className="text-slate-500">Total Goal</span>
                                 <span className="font-bold text-slate-900">
-                                    ${event.registry_items?.reduce((acc, curr) => acc + parseFloat(curr.price), 0).toFixed(2) || '0.00'}
+                                    ₦{event.registry_items?.reduce((acc, curr) => acc + parseFloat(curr.price), 0).toLocaleString() || '0'}
                                 </span>
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-slate-500">Raised so far</span>
                                 <span className="font-bold text-primary-600 text-lg">
-                                    ${event.registry_items?.reduce((acc, curr) => acc + parseFloat(curr.amount_raised), 0).toFixed(2) || '0.00'}
+                                    ₦{event.registry_items?.reduce((acc, curr) => acc + parseFloat(curr.amount_raised), 0).toLocaleString() || '0'}
                                 </span>
                             </div>
                             <div className="pt-4 border-t border-slate-50">
@@ -169,7 +169,7 @@ const EventDetails = () => {
                                         {event.registry_items.flatMap(i => i.contributions || []).map(c => (
                                             <div key={c.id} className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
                                                 <div className="flex justify-between items-start mb-2">
-                                                    <span className="font-bold text-slate-900">${parseFloat(c.amount).toFixed(2)}</span>
+                                                    <span className="font-bold text-slate-900">₦{parseFloat(c.amount).toLocaleString()}</span>
                                                     <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded ${c.status === 'verified' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
                                                         {c.status}
                                                     </span>

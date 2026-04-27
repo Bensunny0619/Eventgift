@@ -42,7 +42,7 @@ const ContributionModal = ({ isOpen, onClose, item, onContributionPledged }) => 
                     </div>
                     <h2 className="text-2xl font-bold text-slate-900 mb-4">Pledge Received!</h2>
                     <p className="text-slate-600 mb-8 leading-relaxed">
-                        Thank you for your generous contribution of <span className="font-bold text-slate-900">${parseFloat(amount).toFixed(2)}</span> toward <span className="font-bold text-slate-900">{item.title}</span>.
+                        Thank you for your generous contribution of <span className="font-bold text-slate-900">₦{parseFloat(amount).toLocaleString()}</span> toward <span className="font-bold text-slate-900">{item.title}</span>.
                     </p>
 
                     <div className="bg-slate-50 p-6 rounded-2xl mb-8 text-left border border-slate-100">
@@ -83,13 +83,13 @@ const ContributionModal = ({ isOpen, onClose, item, onContributionPledged }) => 
                         </div>
                         <div>
                             <h4 className="font-bold text-slate-900">{item.title}</h4>
-                            <p className="text-xs text-primary-600 font-medium">Goal: ${parseFloat(item.price).toFixed(2)}</p>
+                            <p className="text-xs text-primary-600 font-medium">Goal: ₦{parseFloat(item.price).toLocaleString()}</p>
                         </div>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div>
-                            <label className="block text-sm font-bold text-slate-700 mb-3">Amount to Pledge ($)</label>
+                            <label className="block text-sm font-bold text-slate-700 mb-3">Amount to Pledge (₦)</label>
                             <input
                                 type="number"
                                 step="0.01"
