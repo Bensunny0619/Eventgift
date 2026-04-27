@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Users, 
     Search, 
@@ -9,21 +9,35 @@ import {
     XCircle,
     ChevronRight,
     MoreHorizontal,
-    Filter
+    Filter,
+    Loader2
 } from 'lucide-react';
+import api from '../api/api';
+import InviteGuestModal from '../components/InviteGuestModal';
 
 const Guests = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('All Guests');
+    const [guests, setGuests] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
-    const guests = [
-        { id: 1, name: 'Lord Sebastian Thorne', email: 'sebastian@heritage.co', event: 'The Heritage Gala 2026', status: 'Confirmed', tier: 'VVIP' },
-        { id: 2, name: 'Lady Genevieve Rose', email: 'gen@royal.net', event: 'Modern Luxe Soirée', status: 'Pending', tier: 'Gold' },
-        { id: 3, name: 'Sir Julian Sterling', email: 'julian@sterling.com', event: 'The Heritage Gala 2026', status: 'Confirmed', tier: 'VVIP' },
-        { id: 4, name: 'Elena Vance', email: 'elena@vance.io', event: 'Techno-Cultural Expo', status: 'Declined', tier: 'Standard' },
-        { id: 5, name: 'Arthur Penhaligon', email: 'arthur@estates.uk', event: 'Modern Luxe Soirée', status: 'Confirmed', tier: 'Gold' },
-        { id: 6, name: 'Clara Montesque', email: 'clara@arts.fr', event: 'Celestial Gathering', status: 'Pending', tier: 'VVIP' },
-    ];
+    useEffect(() => {
+        fetchGuests();
+    }, []);
+
+    const fetchGuests = () => {
+        setIsLoading(true);
+        api.get('/guests')
+            .then(res => setGuests(res.data))
+            .catch(err => console.error('Failed to fetch guests', err))
+            .finally(() => setIsLoading(false));
+    };
+
+    const handleGuestAdded = (newGuest) => {
+        // Refresh local list or just fetch again
+        fetchGuests();
+    };
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -44,11 +58,27 @@ const Guests = () => {
     };
 
     const filteredGuests = guests.filter(guest => {
-        const matchesSearch = guest.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                             guest.email.toLowerCase().includes(searchTerm.toLowerCase());
+        const name = guest.name || '';
+        const email = guest.email || '';
+        const matchesSearch = name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                             email.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesStatus = statusFilter === 'All Guests' || guest.status === statusFilter;
         return matchesSearch && matchesStatus;
     });
+
+    const stats = [
+        { label: 'Total Invitees', value: guests.length.toLocaleString(), icon: Users, color: 'text-slate-900 dark:text-white' },
+        { label: 'Confirmed RSVP', value: guests.filter(g => g.status === 'Confirmed').length.toLocaleString(), icon: CheckCircle2, color: 'text-emerald-500' },
+        { label: 'Awaiting Response', value: guests.filter(g => g.status === 'Pending').length.toLocaleString(), icon: Clock, color: 'text-amber-500' },
+    ];
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <Loader2 className="h-10 w-10 text-exquisite-gold animate-spin" />
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -60,7 +90,10 @@ const Guests = () => {
                         Manage your guest lists and track RSVPs for all your events.
                     </p>
                 </div>
-                <button className="flex items-center justify-center space-x-3 px-8 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold shadow-2xl hover:scale-[1.02] transition-all group shrink-0">
+                <button 
+                    onClick={() => setIsInviteModalOpen(true)}
+                    className="flex items-center justify-center space-x-3 px-8 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all group shrink-0"
+                >
                     <UserPlus className="h-5 w-5 group-hover:rotate-12 transition-transform" />
                     <span>Invite New Guest</span>
                 </button>
@@ -68,11 +101,7 @@ const Guests = () => {
 
             {/* Quick Stats */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                {[
-                    { label: 'Total Invitees', value: '1,248', icon: Users, color: 'text-slate-900 dark:text-white' },
-                    { label: 'Confirmed RSVP', value: '842', icon: CheckCircle2, color: 'text-emerald-500' },
-                    { label: 'Awaiting Response', value: '316', icon: Clock, color: 'text-amber-500' },
-                ].map((stat, i) => (
+                {stats.map((stat, i) => (
                     <div key={i} className="exquisite-card p-8 flex items-center space-x-6 border-none">
                         <div className={`h-14 w-14 rounded-2xl bg-slate-50 dark:bg-white/5 flex items-center justify-center`}>
                             <stat.icon className={`h-6 w-6 ${stat.color}`} />
@@ -134,7 +163,7 @@ const Guests = () => {
                                     <td colSpan="4" className="px-8 py-20 text-center">
                                         <div className="flex flex-col items-center">
                                             <Users className="h-12 w-12 text-slate-200 dark:text-white/10 mb-4" />
-                                            <p className="text-slate-500 font-mediumitalic">No guests matching your criteria were found.</p>
+                                            <p className="text-slate-500 font-medium italic">No guests matching your criteria were found.</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -144,14 +173,18 @@ const Guests = () => {
                                         <td className="px-8 py-6">
                                             <div className="flex items-center space-x-4">
                                                 <div className="h-12 w-12 rounded-full gold-gradient flex items-center justify-center text-white font-serif text-lg shadow-inner">
-                                                    {guest.name.charAt(0)}
+                                                    {(guest.name || 'G').charAt(0)}
                                                 </div>
                                                 <div>
                                                     <p className="font-bold text-slate-900 dark:text-white group-hover:text-exquisite-gold transition-colors">{guest.name}</p>
                                                     <div className="flex items-center text-xs text-slate-400 mt-0.5">
-                                                        <Mail className="h-3 w-3 mr-1.5" />
-                                                        {guest.email}
-                                                        <span className="mx-2 opacity-30">|</span>
+                                                        {guest.email && (
+                                                            <>
+                                                                <Mail className="h-3 w-3 mr-1.5" />
+                                                                {guest.email}
+                                                                <span className="mx-2 opacity-30">|</span>
+                                                            </>
+                                                        )}
                                                         <span className="text-exquisite-gold font-black uppercase tracking-tighter text-[9px]">{guest.tier} Member</span>
                                                     </div>
                                                 </div>
@@ -160,7 +193,7 @@ const Guests = () => {
                                         <td className="px-8 py-6">
                                             <div className="flex items-center text-slate-600 dark:text-slate-300 font-medium">
                                                 <ChevronRight className="h-4 w-4 text-exquisite-gold mr-2" />
-                                                {guest.event}
+                                                {guest.event?.title || 'Unknown Event'}
                                             </div>
                                         </td>
                                         <td className="px-8 py-6">
@@ -181,6 +214,12 @@ const Guests = () => {
                     </table>
                 </div>
             </div>
+
+            <InviteGuestModal 
+                isOpen={isInviteModalOpen} 
+                onClose={() => setIsInviteModalOpen(false)} 
+                onGuestAdded={handleGuestAdded}
+            />
         </div>
     );
 };

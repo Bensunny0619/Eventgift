@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
-import { Calendar, MapPin, Type, AlignLeft, ArrowRight, Loader2, Sparkles } from 'lucide-react';
+import { Calendar as CalendarIcon, MapPin, Type, AlignLeft, ArrowRight, Loader2, Sparkles } from 'lucide-react';
+import CalendarModal from '../components/CalendarModal';
 
 const CreateEvent = () => {
     const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const CreateEvent = () => {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -24,7 +26,11 @@ const CreateEvent = () => {
             const response = await api.post('/events', formData);
             navigate(`/events/${response.data.id}`);
         } catch (err) {
-            setError(err.response?.data?.message || 'Failed to create event. Please try again.');
+            if (err.response?.status === 401) {
+                setError('Your session has expired. Please log in again.');
+            } else {
+                setError(err.response?.data?.message || 'Failed to create event. Please try again.');
+            }
         } finally {
             setIsLoading(false);
         }
@@ -76,15 +82,20 @@ const CreateEvent = () => {
                                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 absolute -top-2.5 left-5 px-2 bg-white dark:bg-slate-900 transition-colors group-focus-within:text-exquisite-gold">
                                     Event Date
                                 </label>
-                                <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-                                    <Calendar className="h-5 w-5 text-slate-300 group-focus-within:text-exquisite-gold transition-colors" />
+                                <div 
+                                    className="absolute inset-y-0 left-0 pl-6 flex items-center cursor-pointer"
+                                    onClick={() => setIsCalendarOpen(true)}
+                                >
+                                    <CalendarIcon className="h-5 w-5 text-slate-300 group-focus-within:text-exquisite-gold transition-colors hover:text-exquisite-gold" />
                                 </div>
                                 <input
-                                    type="date"
+                                    type="text"
+                                    readOnly
                                     required
-                                    className="block w-full pl-16 pr-6 py-5 bg-transparent border-2 border-slate-50 dark:border-white/5 rounded-2xl text-slate-900 dark:text-white focus:outline-none focus:border-exquisite-gold/30 transition-all font-bold"
-                                    value={formData.date}
-                                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                    placeholder="Select celebration date"
+                                    onClick={() => setIsCalendarOpen(true)}
+                                    className="block w-full pl-16 pr-6 py-5 bg-transparent border-2 border-slate-50 dark:border-white/5 rounded-2xl text-slate-900 dark:text-white focus:outline-none focus:border-exquisite-gold/30 transition-all font-bold cursor-pointer placeholder-slate-300 dark:placeholder-slate-700"
+                                    value={formData.date ? new Date(formData.date).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
                                 />
                             </div>
 
@@ -142,6 +153,13 @@ const CreateEvent = () => {
                     </div>
                 </form>
             </div>
+
+            <CalendarModal 
+                isOpen={isCalendarOpen} 
+                onClose={() => setIsCalendarOpen(false)}
+                selectedDate={formData.date}
+                onDateSelect={(date) => setFormData({ ...formData, date })}
+            />
         </div>
     );
 };

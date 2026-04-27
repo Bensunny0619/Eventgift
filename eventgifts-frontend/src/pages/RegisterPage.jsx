@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../api/api';
+import { useAuth } from '../context/AuthContext';
 import { Loader2, ArrowRight, Diamond, User, Mail, Lock } from 'lucide-react';
 
 const RegisterPage = () => {
@@ -9,6 +9,7 @@ const RegisterPage = () => {
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const { register } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -16,8 +17,8 @@ const RegisterPage = () => {
         setIsLoading(true);
         setError('');
         try {
-            await api.post('/register', { name, email, password });
-            navigate('/login');
+            await register(name, email, password);
+            navigate('/dashboard');
         } catch (err) {
             if (err.response?.data?.errors) {
                 const errorMessages = Object.values(err.response.data.errors).flat().join(' ');

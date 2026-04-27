@@ -14,6 +14,7 @@ import Events from './pages/Events';
 import GiftSuite from './pages/GiftSuite';
 import Guests from './pages/Guests';
 import PublicEvent from './pages/PublicEvent';
+import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './context/AuthContext';
 
 function App() {
@@ -68,15 +69,17 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/gifts" element={<GiftSuite />} />
-            <Route path="/guests" element={<Guests />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/events/create" element={<CreateEvent />} />
-            <Route path="/events/:id" element={<EventDetails />} />
+            
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/events" element={<ProtectedRoute><Events /></ProtectedRoute>} />
+            <Route path="/gifts" element={<ProtectedRoute><GiftSuite /></ProtectedRoute>} />
+            <Route path="/guests" element={<ProtectedRoute><Guests /></ProtectedRoute>} />
+            <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+            <Route path="/events/create" element={<ProtectedRoute><CreateEvent /></ProtectedRoute>} />
+            <Route path="/events/:id" element={<ProtectedRoute><EventDetails /></ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            
             <Route path="/registry/:id" element={<PublicEvent />} />
-            <Route path="/settings" element={<Settings />} />
             <Route path="/explore" element={<div className="p-20 text-center font-serif text-3xl">Explore Events Placeholder</div>} />
           </Routes>
         </main>
