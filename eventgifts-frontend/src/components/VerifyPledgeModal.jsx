@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, ShieldCheck, Search, Loader2, CheckCircle2, AlertCircle, Play } from 'lucide-react';
+import { X, ShieldCheck, Search, Loader2, CheckCircle2, AlertCircle, Play, Sparkles } from 'lucide-react';
 import api from '../api/api';
 
 const VerifyPledgeModal = ({ isOpen, onClose, onVerified }) => {

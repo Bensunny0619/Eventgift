@@ -14,6 +14,7 @@ import Events from './pages/Events';
 import GiftSuite from './pages/GiftSuite';
 import Guests from './pages/Guests';
 import PublicEvent from './pages/PublicEvent';
+import EditEvent from './pages/EditEvent';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './context/AuthContext';
 
@@ -77,6 +78,7 @@ function App() {
             <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
             <Route path="/events/create" element={<ProtectedRoute><CreateEvent /></ProtectedRoute>} />
             <Route path="/events/:id" element={<ProtectedRoute><EventDetails /></ProtectedRoute>} />
+            <Route path="/events/:id/edit" element={<ProtectedRoute><EditEvent /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             
             <Route path="/registry/:id" element={<PublicEvent />} />

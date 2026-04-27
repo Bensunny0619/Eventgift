@@ -11,7 +11,8 @@ import {
     Search,
     Share2,
     ChevronRight,
-    Diamond
+    Diamond,
+    Users
 } from 'lucide-react';
 import ContributionModal from '../components/ContributionModal';
 import VerifyPledgeModal from '../components/VerifyPledgeModal';
@@ -52,7 +53,7 @@ const PublicEvent = () => {
     }
 
     const filteredItems = event.registry_items?.filter(item => {
-        if (activeTab === ' pledged') return (parseFloat(item.amount_raised) / parseFloat(item.price)) >= 1;
+        if (activeTab === 'pledged') return (parseFloat(item.amount_raised) / parseFloat(item.price)) >= 1;
         if (activeTab === 'available') return (parseFloat(item.amount_raised) / parseFloat(item.price)) < 1;
         return true;
     }) || [];
@@ -78,10 +79,13 @@ const PublicEvent = () => {
                                 <Share2 className="h-5 w-5" />
                                 <span className="text-xs font-black uppercase tracking-widest hidden sm:inline">Share</span>
                             </button>
-                            <button className="px-10 py-5 gold-gradient text-white font-bold rounded-2xl shadow-xl shadow-exquisite-gold/20 flex items-center space-x-3 group hover:scale-105 transition-all">
+                            <Link 
+                                to={`/events/${event.id}`}
+                                className="px-10 py-5 gold-gradient text-white font-bold rounded-2xl shadow-xl shadow-exquisite-gold/20 flex items-center space-x-3 group hover:scale-105 transition-all"
+                            >
                                 <Diamond className="h-5 w-5" />
                                 <span>Manage</span>
-                            </button>
+                            </Link>
                         </div>
                     </div>
 
