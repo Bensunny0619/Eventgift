@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\Guest;
 use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EventInvitationMail;
 
 class GuestController extends Controller
 {
@@ -76,6 +78,11 @@ class GuestController extends Controller
         }
 
         $guest = Guest::create($validated);
+
+        if (!empty($guest->email)) {
+            // Send invitation email in the background if they have an email address
+            Mail::to($guest->email)->send(new EventInvitationMail($event, $guest));
+        }
 
         return response()->json($guest, 201);
     }
