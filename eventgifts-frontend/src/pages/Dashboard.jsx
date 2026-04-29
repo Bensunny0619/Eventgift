@@ -16,11 +16,28 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import StatCard from '../components/StatCard';
+import AddItemModal from '../components/AddItemModal';
 
 const Dashboard = () => {
     const { user } = useAuth();
     const [events, setEvents] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+    const [suggestedGiftData, setSuggestedGiftData] = useState(null);
+
+    const handleAddSuggestedGift = () => {
+        if (events.length === 0) {
+            alert("Please create an event first to add gifts to your registry.");
+            return;
+        }
+        setSuggestedGiftData({
+            title: "Samsung Double Door Fridge",
+            price: "850000",
+            description: "A premium double door fridge.",
+            image_url: ""
+        });
+        setIsAddItemModalOpen(true);
+    };
 
     useEffect(() => {
         api.get('/events')
@@ -204,7 +221,7 @@ const Dashboard = () => {
                                 <h4 className="text-2xl font-serif text-slate-900 dark:text-white leading-tight">Samsung Double Door Fridge</h4>
                                 <p className="text-slate-500 mt-1 font-medium italic">₦850,000 / Unit</p>
                             </div>
-                            <button className="w-full py-4 bg-exquisite-gold/10 text-exquisite-gold hover:bg-exquisite-gold hover:text-white rounded-2xl font-bold transition-all flex items-center justify-center space-x-2">
+                            <button onClick={handleAddSuggestedGift} className="w-full py-4 bg-exquisite-gold/10 text-exquisite-gold hover:bg-exquisite-gold hover:text-white rounded-2xl font-bold transition-all flex items-center justify-center space-x-2">
                                 <Plus className="h-5 w-5" />
                                 <span>Add to Registry</span>
                             </button>
@@ -227,6 +244,20 @@ const Dashboard = () => {
                 </div>
 
             </div>
+
+            {events.length > 0 && (
+                <AddItemModal
+                    isOpen={isAddItemModalOpen}
+                    onClose={() => setIsAddItemModalOpen(false)}
+                    eventId={events[0].id}
+                    onItemAdded={(newItem) => {
+                        api.get('/events')
+                            .then(res => setEvents(res.data))
+                            .catch(err => console.error('Failed to fetch events', err));
+                    }}
+                    initialData={suggestedGiftData}
+                />
+            )}
         </div>
     );
 };

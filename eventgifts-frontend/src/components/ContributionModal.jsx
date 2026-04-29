@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Heart, ShieldCheck, Loader2, MessageCircle } from 'lucide-react';
+import { X, Heart, ShieldCheck, Loader2, MessageCircle, Gift } from 'lucide-react';
 import api from '../api/api';
 
 const ContributionModal = ({ isOpen, onClose, item, onContributionPledged }) => {
@@ -18,8 +18,7 @@ const ContributionModal = ({ isOpen, onClose, item, onContributionPledged }) => 
         setError('');
 
         try {
-            const response = await api.post('/contributions', {
-                item_id: item.id,
+            const response = await api.post(`/registry-items/${item.id}/contribute`, {
                 amount: parseFloat(amount),
                 message_text: message
             });

@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Gift, Type, AlignLeft, Loader2, Image as ImageIcon, Sparkles, Diamond } from 'lucide-react';
 import api from '../api/api';
 
-const AddItemModal = ({ isOpen, onClose, eventId, onItemAdded }) => {
+const AddItemModal = ({ isOpen, onClose, eventId, onItemAdded, initialData }) => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -11,6 +11,19 @@ const AddItemModal = ({ isOpen, onClose, eventId, onItemAdded }) => {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+
+    useEffect(() => {
+        if (isOpen && initialData) {
+            setFormData({
+                title: initialData.title || '',
+                description: initialData.description || '',
+                price: initialData.price || '',
+                image_url: initialData.image_url || ''
+            });
+        } else if (isOpen) {
+            setFormData({ title: '', description: '', price: '', image_url: '' });
+        }
+    }, [isOpen, initialData]);
 
     if (!isOpen) return null;
 
