@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, X, Sparkles } from 'lucide-react';
 
 const CalendarModal = ({ isOpen, onClose, onDateSelect, selectedDate }) => {
-    const [currentDate, setCurrentDate] = useState(selectedDate ? new Date(selectedDate) : new Date());
+    const [currentDate, setCurrentDate] = useState(() => {
+        if (selectedDate) {
+            const d = new Date(selectedDate);
+            return isNaN(d) ? new Date() : d;
+        }
+        return new Date();
+    });
     
     if (!isOpen) return null;
 
@@ -99,8 +105,8 @@ const CalendarModal = ({ isOpen, onClose, onDateSelect, selectedDate }) => {
                     </div>
 
                     <div className="grid grid-cols-7 gap-1 mb-2">
-                        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(day => (
-                            <div key={day} className="aspect-square flex items-center justify-center text-[10px] font-black text-slate-400">
+                        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
+                            <div key={index} className="aspect-square flex items-center justify-center text-[10px] font-black text-slate-400">
                                 {day}
                             </div>
                         ))}

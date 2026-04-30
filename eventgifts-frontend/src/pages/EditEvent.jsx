@@ -19,6 +19,12 @@ const EditEvent = () => {
     const [error, setError] = useState('');
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '';
+        const d = new Date(dateStr);
+        return isNaN(d) ? '' : d.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+    };
+
     useEffect(() => {
         api.get(`/events/${id}`)
             .then(res => {
@@ -111,7 +117,7 @@ const EditEvent = () => {
                                     required
                                     onClick={() => setIsCalendarOpen(true)}
                                     className="block w-full pl-16 pr-6 py-5 bg-transparent border-2 border-slate-50 dark:border-white/5 rounded-2xl text-slate-900 dark:text-white focus:outline-none focus:border-exquisite-gold/30 transition-all font-bold cursor-pointer"
-                                    value={formData.date ? new Date(formData.date).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
+                                    value={formatDate(formData.date)}
                                 />
                             </div>
 

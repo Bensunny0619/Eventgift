@@ -15,6 +15,12 @@ const CreateEvent = () => {
     const [error, setError] = useState('');
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '';
+        const d = new Date(dateStr);
+        return isNaN(d) ? '' : d.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+    };
+
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -95,7 +101,7 @@ const CreateEvent = () => {
                                     placeholder="Select celebration date"
                                     onClick={() => setIsCalendarOpen(true)}
                                     className="block w-full pl-16 pr-6 py-5 bg-transparent border-2 border-slate-50 dark:border-white/5 rounded-2xl text-slate-900 dark:text-white focus:outline-none focus:border-exquisite-gold/30 transition-all font-bold cursor-pointer placeholder-slate-300 dark:placeholder-slate-700"
-                                    value={formData.date ? new Date(formData.date).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
+                                    value={formatDate(formData.date)}
                                 />
                             </div>
 
