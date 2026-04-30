@@ -10,9 +10,6 @@ const ContributionModal = ({ isOpen, onClose, item, onSuccess }) => {
     const [pledgeSuccess, setPledgeSuccess] = useState(false);
     const [pledgeData, setPledgeData] = useState(null);
     const handleClose = () => {
-        if (pledgeSuccess && onSuccess) {
-            onSuccess();
-        }
         onClose();
         // Reset state
         setPledgeSuccess(false);
@@ -35,6 +32,8 @@ const ContributionModal = ({ isOpen, onClose, item, onSuccess }) => {
             });
             setPledgeData(response.data.contribution);
             setPledgeSuccess(true);
+            // Refresh the registry immediately in the background
+            if (onSuccess) onSuccess();
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to process pledge. Please try again.');
         } finally {

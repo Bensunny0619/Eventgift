@@ -27,6 +27,7 @@ const PublicEvent = () => {
     const [activeTab, setActiveTab] = useState('all'); // all, pledged, available
     const [searchQuery, setSearchQuery] = useState('');
     const [isCopied, setIsCopied] = useState(false);
+    const [giftLaterToast, setGiftLaterToast] = useState('');
 
     const fetchEvent = () => {
         api.get(`/events/${id}/public`)
@@ -82,7 +83,14 @@ const PublicEvent = () => {
     return (
         <div className="bg-exquisite-cream dark:bg-exquisite-midnight min-h-screen text-slate-900 dark:text-white transition-colors duration-500">
 
-            {/* Elegant Header */}
+            {/* Gift Later Toast */}
+            {giftLaterToast && (
+                <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] flex items-center space-x-3 px-8 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-3 duration-300">
+                    <Gift className="h-5 w-5 text-exquisite-gold flex-shrink-0" />
+                    <p className="text-sm font-bold">{giftLaterToast}</p>
+                </div>
+            )}
+
             <header className="pt-20 pb-16 border-b border-slate-100 dark:border-white/5">
                 <div className="max-w-[1400px] mx-auto px-10">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
@@ -221,7 +229,13 @@ const PublicEvent = () => {
                                             >
                                                 {isFulfilled ? 'Claimed' : 'Pledge'}
                                             </button>
-                                            <button className="px-8 py-5 border-2 border-slate-100 dark:border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-exquisite-gold hover:border-exquisite-gold transition-all">
+                                            <button 
+                                                onClick={() => {
+                                                    setGiftLaterToast(`Reminder saved! We'll remind you to gift "${item.title}" before the event.`);
+                                                    setTimeout(() => setGiftLaterToast(''), 3000);
+                                                }}
+                                                className="px-8 py-5 border-2 border-slate-100 dark:border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-exquisite-gold hover:border-exquisite-gold transition-all"
+                                            >
                                                 Gift Later
                                             </button>
                                         </div>
