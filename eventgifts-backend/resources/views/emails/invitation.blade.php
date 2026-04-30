@@ -1,28 +1,31 @@
 <x-mail::message>
 # You're Invited!
 
-Hi {{ $guest->name }},
+Hi **{{ $guest->name }}**,
 
-You have been invited to **{{ $event->title }}**! 
+You have been cordially invited to **{{ $event->title }}**! 
 
-**Date:** {{ \Carbon\Carbon::parse($event->date)->format('F j, Y, g:i a') }}
+<x-mail::panel>
+**Date:** {{ \Carbon\Carbon::parse($event->date)->format('F j, Y, g:i a') }}  
 **Location:** {{ $event->location ?? 'See event page for details' }}
+</x-mail::panel>
 
 {{ $event->description }}
 
-We'd love for you to join us. You can view the event details and access the registry below.
+We would be honored to have you celebrate with us. You can view the event details and access our gift registry using the button below.
 
 @php
-    // In a real app, you might want a config value or front-end URL here
-    $url = rtrim(config('app.url'), '/') . ':5173/registry/' . $event->id;
+    $frontendUrl = config('app.frontend_url');
+    $url = rtrim($frontendUrl, '/') . '/registry/' . $event->id;
 @endphp
 
 <x-mail::button :url="$url">
 View Event & Registry
 </x-mail::button>
 
-We can't wait to celebrate with you!
+We look forward to seeing you there!
 
-Thanks,<br>
-{{ config('app.name') }}
+Warmly,  
+**{{ $event->host->name }}**  
+*via {{ config('app.name') }}*
 </x-mail::message>

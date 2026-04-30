@@ -49,5 +49,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/contributions/{contribution}/thank-you', [ThankYouVideoController::class, 'store']);
 
     // Guest management
+    Route::post('/guests/{guest}/resend-invitation', [GuestController::class, 'resendInvitation']);
     Route::apiResource('guests', GuestController::class)->except(['show']);
 });

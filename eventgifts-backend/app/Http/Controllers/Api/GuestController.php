@@ -72,7 +72,7 @@ class GuestController extends Controller
             'tier' => 'sometimes|required|string|max:50',
         ]);
 
-        $event = Event::findOrFail($validated['event_id']);
+        $event = Event::with('host')->findOrFail($validated['event_id']);
         if ($event->host_id !== Auth::id()) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
@@ -80,8 +80,13 @@ class GuestController extends Controller
         $guest = Guest::create($validated);
 
         if (!empty($guest->email)) {
-            // Send invitation email in the background if they have an email address
-            Mail::to($guest->email)->send(new EventInvitationMail($event, $guest));
+            try {
+                // Send invitation email in the background if they have an email address
+                Mail::to($guest->email)->send(new EventInvitationMail($event, $guest));
+            } catch (\Exception $e) {
+                // Log error but don't fail the request
+                \Illuminate\Support\Facades\Log::error('Failed to send invitation email: ' . $e->getMessage());
+            }
         }
 
         return response()->json($guest, 201);
@@ -114,5 +119,30 @@ class GuestController extends Controller
         $guest->delete();
 
         return response()->json(['message' => 'Guest removed successfully']);
+    }
+
+    public function resendInvitation(Guest $guest)
+    {
+        if ($guest->event->host_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        if (empty($guest->email)) {
+            return response()->json(['message' => 'Guest has no email address'], 422);
+        }
+
+        $event = $guest->event;
+        if (!$event) {
+            return response()->json(['message' => 'Event not found'], 404);
+        }
+        $event->load('host');
+        
+        try {
+            Mail::to($guest->email)->send(new EventInvitationMail($event, $guest));
+            return response()->json(['message' => 'Invitation resent successfully']);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to resend invitation email: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to send email'], 500);
+        }
     }
 }
