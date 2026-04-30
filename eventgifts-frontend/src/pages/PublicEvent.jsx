@@ -25,13 +25,27 @@ const PublicEvent = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isVerifyOpen, setIsVerifyOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('all'); // all, pledged, available
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isCopied, setIsCopied] = useState(false);
 
-    useEffect(() => {
+    const fetchEvent = () => {
         api.get(`/events/${id}/public`)
             .then(res => setEvent(res.data))
             .catch(err => console.error(err))
             .finally(() => setIsLoading(false));
+    };
+
+    useEffect(() => {
+        fetchEvent();
     }, [id]);
+
+    const handleShare = () => {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000);
+        });
+    };
 
     if (isLoading) {
         return (
@@ -53,9 +67,16 @@ const PublicEvent = () => {
     }
 
     const filteredItems = event.registry_items?.filter(item => {
-        if (activeTab === 'pledged') return (parseFloat(item.amount_raised) / parseFloat(item.price)) >= 1;
-        if (activeTab === 'available') return (parseFloat(item.amount_raised) / parseFloat(item.price)) < 1;
-        return true;
+        const matchesTab = 
+            activeTab === 'all' || 
+            (activeTab === 'pledged' && (parseFloat(item.amount_raised) / parseFloat(item.price)) >= 1) ||
+            (activeTab === 'available' && (parseFloat(item.amount_raised) / parseFloat(item.price)) < 1);
+        
+        const matchesSearch = 
+            item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (item.description && item.description.toLowerCase().includes(searchQuery.toLowerCase()));
+
+        return matchesTab && matchesSearch;
     }) || [];
 
     return (
@@ -75,9 +96,14 @@ const PublicEvent = () => {
                         </div>
 
                         <div className="flex items-center space-x-6">
-                            <button className="p-4 exquisite-glass rounded-2xl text-slate-500 hover:text-exquisite-gold transition-colors flex items-center space-x-3 group">
+                            <button 
+                                onClick={handleShare}
+                                className="p-4 exquisite-glass rounded-2xl text-slate-500 hover:text-exquisite-gold transition-colors flex items-center space-x-3 group relative"
+                            >
                                 <Share2 className="h-5 w-5" />
-                                <span className="text-xs font-black uppercase tracking-widest hidden sm:inline">Share</span>
+                                <span className="text-xs font-black uppercase tracking-widest hidden sm:inline">
+                                    {isCopied ? 'Copied!' : 'Share'}
+                                </span>
                             </button>
                             <Link 
                                 to={`/events/${event.id}`}
@@ -106,7 +132,9 @@ const PublicEvent = () => {
                             <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-300 group-focus-within:text-exquisite-gold transition-colors" />
                             <input
                                 type="text"
-                                placeholder="Find a registry..."
+                                placeholder="Find a gift..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full pl-16 pr-6 py-4 bg-white/50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl text-sm font-bold focus:outline-none focus:ring-2 focus:ring-exquisite-gold/20 transition-all"
                             />
                         </div>
@@ -238,6 +266,7 @@ const PublicEvent = () => {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 item={selectedItem}
+                onSuccess={fetchEvent}
             />
 
             <VerifyPledgeModal

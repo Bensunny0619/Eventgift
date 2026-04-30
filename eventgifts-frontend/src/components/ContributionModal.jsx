@@ -2,13 +2,24 @@ import { useState } from 'react';
 import { X, Heart, ShieldCheck, Loader2, MessageCircle, Gift } from 'lucide-react';
 import api from '../api/api';
 
-const ContributionModal = ({ isOpen, onClose, item, onContributionPledged }) => {
+const ContributionModal = ({ isOpen, onClose, item, onSuccess }) => {
     const [amount, setAmount] = useState(item?.price || '');
     const [message, setMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [pledgeSuccess, setPledgeSuccess] = useState(false);
     const [pledgeData, setPledgeData] = useState(null);
+    const handleClose = () => {
+        if (pledgeSuccess && onSuccess) {
+            onSuccess();
+        }
+        onClose();
+        // Reset state
+        setPledgeSuccess(false);
+        setPledgeData(null);
+        setAmount(item?.price || '');
+        setMessage('');
+    };
 
     if (!isOpen || !item) return null;
 
@@ -24,7 +35,6 @@ const ContributionModal = ({ isOpen, onClose, item, onContributionPledged }) => 
             });
             setPledgeData(response.data.contribution);
             setPledgeSuccess(true);
-            if (onContributionPledged) onContributionPledged(response.data.contribution);
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to process pledge. Please try again.');
         } finally {
@@ -34,31 +44,31 @@ const ContributionModal = ({ isOpen, onClose, item, onContributionPledged }) => 
 
     if (pledgeSuccess) {
         return (
-            <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
-                <div className="bg-white w-full max-w-lg rounded-[2.5rem] shadow-2xl relative overflow-hidden p-10 text-center animate-slide-up">
-                    <div className="mb-6 inline-flex p-4 bg-green-50 rounded-full">
-                        <ShieldCheck className="h-12 w-12 text-green-600" />
+            <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+                <div className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-[2.5rem] shadow-2xl relative overflow-hidden p-10 text-center animate-in zoom-in-95 duration-300 border border-slate-100 dark:border-white/5">
+                    <div className="mb-6 inline-flex p-4 bg-emerald-50 dark:bg-emerald-500/10 rounded-full">
+                        <ShieldCheck className="h-12 w-12 text-emerald-600" />
                     </div>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-4">Pledge Received!</h2>
-                    <p className="text-slate-600 mb-8 leading-relaxed">
-                        Thank you for your generous contribution of <span className="font-bold text-slate-900">₦{parseFloat(amount).toLocaleString()}</span> toward <span className="font-bold text-slate-900">{item.title}</span>.
+                    <h2 className="text-3xl font-serif text-slate-900 dark:text-white mb-4">Pledge Received!</h2>
+                    <p className="text-slate-500 dark:text-slate-400 mb-8 leading-relaxed italic font-medium">
+                        Thank you for your generous contribution of <span className="font-bold text-exquisite-gold">₦{parseFloat(amount).toLocaleString()}</span> toward <span className="font-bold text-slate-900 dark:text-white">{item.title}</span>.
                     </p>
 
-                    <div className="bg-slate-50 p-6 rounded-2xl mb-8 text-left border border-slate-100">
-                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Your Payment Code</span>
-                        <code className="text-xl font-mono text-primary-600 font-bold tracking-widest break-all">
+                    <div className="bg-slate-50 dark:bg-white/5 p-6 rounded-2xl mb-8 text-left border border-slate-100 dark:border-white/5">
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Your Payment Code</span>
+                        <code className="text-xl font-mono text-exquisite-gold font-bold tracking-widest break-all">
                             {pledgeData?.transaction_reference || 'REF-8392-XP'}
                         </code>
-                        <p className="text-[10px] text-slate-400 mt-3 italic">
-                            Use this reference code to verify your offline transfer if needed.
+                        <p className="text-[10px] text-slate-400 mt-4 italic font-medium leading-relaxed">
+                            Please use this reference code when making your transfer. Your pledge will be verified by the host shortly.
                         </p>
                     </div>
 
                     <button
-                        onClick={onClose}
-                        className="w-full py-4 bg-slate-900 text-white font-bold rounded-2xl hover:bg-slate-800 transition-all"
+                        onClick={handleClose}
+                        className="w-full py-5 gold-gradient text-white font-black rounded-2xl shadow-xl shadow-exquisite-gold/20 hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-widest"
                     >
-                        Finish
+                        Return to Registry
                     </button>
                 </div>
             </div>
@@ -66,49 +76,52 @@ const ContributionModal = ({ isOpen, onClose, item, onContributionPledged }) => 
     }
 
     return (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-            <div className="bg-white w-full max-w-lg rounded-[2.5rem] shadow-2xl relative overflow-hidden animate-slide-up">
-                <div className="p-8">
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold text-slate-900">Contribute</h2>
-                        <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
-                            <X className="h-6 w-6 text-slate-400" />
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
+            <div className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-[2.5rem] shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-300 border border-slate-100 dark:border-white/5">
+                <div className="p-8 sm:p-10">
+                    <div className="flex justify-between items-center mb-8">
+                        <div className="space-y-1">
+                            <h2 className="text-3xl font-serif text-slate-900 dark:text-white">Contribute</h2>
+                            <p className="text-xs font-medium text-slate-400 italic">Select an amount to pledge toward this gift.</p>
+                        </div>
+                        <button onClick={onClose} className="p-3 hover:bg-slate-50 dark:hover:bg-white/5 rounded-full text-slate-400 transition-colors">
+                            <X className="h-6 w-6" />
                         </button>
                     </div>
 
-                    <div className="flex items-center space-x-4 mb-8 p-4 bg-primary-50 rounded-2xl">
-                        <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center border border-primary-100">
-                            <Gift className="h-6 w-6 text-primary-600" />
+                    <div className="flex items-center space-x-5 mb-10 p-5 bg-exquisite-gold/5 border border-exquisite-gold/10 rounded-2xl">
+                        <div className="h-14 w-14 bg-white dark:bg-slate-900 rounded-xl flex items-center justify-center border border-exquisite-gold/20 shadow-sm">
+                            <Gift className="h-7 w-7 text-exquisite-gold" />
                         </div>
                         <div>
-                            <h4 className="font-bold text-slate-900">{item.title}</h4>
-                            <p className="text-xs text-primary-600 font-medium">Goal: ₦{parseFloat(item.price).toLocaleString()}</p>
+                            <h4 className="font-bold text-slate-900 dark:text-white tracking-tight">{item.title}</h4>
+                            <p className="text-[11px] text-exquisite-gold font-black uppercase tracking-widest">Target: ₦{parseFloat(item.price).toLocaleString()}</p>
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div>
-                            <label className="block text-sm font-bold text-slate-700 mb-3">Amount to Pledge (₦)</label>
+                    <form onSubmit={handleSubmit} className="space-y-8">
+                        <div className="space-y-3">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-2">Amount to Pledge (₦)</label>
                             <input
                                 type="number"
                                 step="0.01"
                                 required
-                                className="block w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-2xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all placeholder-slate-300"
+                                className="block w-full px-6 py-5 bg-slate-50 dark:bg-white/5 border-2 border-transparent focus:border-exquisite-gold/20 rounded-2xl text-3xl font-serif text-slate-900 dark:text-white focus:outline-none transition-all placeholder-slate-300 dark:placeholder-slate-700"
                                 placeholder="0.00"
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value)}
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-bold text-slate-700 mb-3">A Message for the Host</label>
-                            <div className="relative">
-                                <div className="absolute top-4 left-4 flex items-start">
-                                    <MessageCircle className="h-5 w-5 text-slate-400" />
+                        <div className="space-y-3">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-2">A Message for the Host</label>
+                            <div className="relative group">
+                                <div className="absolute top-5 left-6 flex items-start">
+                                    <MessageCircle className="h-5 w-5 text-slate-300 group-focus-within:text-exquisite-gold transition-colors" />
                                 </div>
                                 <textarea
                                     rows="3"
-                                    className="block w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all font-medium resize-none shadow-inner"
+                                    className="block w-full pl-16 pr-6 py-5 bg-slate-50 dark:bg-white/5 border-2 border-transparent focus:border-exquisite-gold/20 rounded-2xl text-slate-900 dark:text-white focus:outline-none transition-all font-medium resize-none placeholder-slate-300 dark:placeholder-slate-700"
                                     placeholder="e.g., Happy Birthday! Sending you so much love."
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
@@ -116,10 +129,16 @@ const ContributionModal = ({ isOpen, onClose, item, onContributionPledged }) => 
                             </div>
                         </div>
 
+                        {error && (
+                            <div className="p-4 bg-rose-50 dark:bg-rose-500/10 border border-rose-100 dark:border-rose-500/20 rounded-xl text-rose-600 dark:text-rose-400 text-xs font-bold text-center">
+                                {error}
+                            </div>
+                        )}
+
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full py-4 bg-primary-600 hover:bg-primary-700 text-white text-lg font-bold rounded-2xl shadow-xl shadow-primary-200 transition-all transform hover:-translate-y-1 flex items-center justify-center disabled:opacity-70 disabled:transform-none"
+                            className="w-full py-6 gold-gradient text-white font-black rounded-2xl shadow-xl shadow-exquisite-gold/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center disabled:opacity-70 uppercase tracking-widest text-sm"
                         >
                             {isLoading ? (
                                 <Loader2 className="h-6 w-6 animate-spin" />
@@ -129,7 +148,6 @@ const ContributionModal = ({ isOpen, onClose, item, onContributionPledged }) => 
                                 </>
                             )}
                         </button>
-                        <p className="text-center text-[10px] text-slate-400 uppercase tracking-widest font-bold">Secure Pledge System</p>
                     </form>
                 </div>
             </div>

@@ -26,6 +26,7 @@ const EventDetails = () => {
     const [event, setEvent] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingItem, setEditingItem] = useState(null);
     const [isThankYouOpen, setIsThankYouOpen] = useState(false);
     const [activeContribution, setActiveContribution] = useState(null);
     const [isCopied, setIsCopied] = useState(false);
@@ -37,11 +38,48 @@ const EventDetails = () => {
             .finally(() => setIsLoading(false));
     }, [id]);
 
-    const handleItemAdded = (newItem) => {
-        setEvent(prev => ({
-            ...prev,
-            registry_items: [...(prev.registry_items || []), newItem]
-        }));
+    const handleItemAdded = (newItem, isUpdate = false) => {
+        if (isUpdate) {
+            setEvent(prev => ({
+                ...prev,
+                registry_items: prev.registry_items.map(item => 
+                    item.id === newItem.id ? newItem : item
+                )
+            }));
+        } else {
+            setEvent(prev => ({
+                ...prev,
+                registry_items: [...(prev.registry_items || []), newItem]
+            }));
+        }
+        setEditingItem(null);
+    };
+
+    const handleDeleteItem = async (itemId) => {
+        if (!window.confirm('Are you sure you want to delete this item?')) return;
+        
+        try {
+            await api.delete(`/registry-items/${itemId}`);
+            setEvent(prev => ({
+                ...prev,
+                registry_items: prev.registry_items.filter(item => item.id !== itemId)
+            }));
+        } catch (err) {
+            console.error('Failed to delete item', err);
+            alert('Failed to delete item.');
+        }
+    };
+
+    const handleDeleteEvent = async () => {
+        if (!window.confirm('Are you sure you want to delete this entire event? This cannot be undone.')) return;
+        
+        try {
+            await api.delete(`/events/${id}`);
+            window.location.href = '/dashboard';
+        } catch (err) {
+            console.error('Failed to delete event', err);
+            alert('Failed to delete event.');
+        }
     };
 
     const handleVideoSent = (cid) => {
@@ -136,7 +174,10 @@ const EventDetails = () => {
                     >
                         <Share2 className="h-5 w-5 group-hover:scale-110 transition-transform" />
                     </button>
-                    <button className="h-14 w-14 flex items-center justify-center exquisite-glass rounded-2xl text-slate-400 hover:text-rose-500 hover:border-rose-500/30 transition-all shadow-lg group">
+                    <button 
+                        onClick={handleDeleteEvent}
+                        className="h-14 w-14 flex items-center justify-center exquisite-glass rounded-2xl text-slate-400 hover:text-rose-500 hover:border-rose-500/30 transition-all shadow-lg group"
+                    >
                         <Trash2 className="h-5 w-5 group-hover:scale-110 transition-transform" />
                     </button>
                     <Link 
@@ -217,8 +258,22 @@ const EventDetails = () => {
                                             ) : (
                                                 <Diamond className="h-16 w-16 text-exquisite-gold/20" />
                                             )}
-                                            <div className="absolute top-4 right-4 h-10 w-10 gold-gradient rounded-xl flex items-center justify-center text-white shadow-lg">
-                                                <Gift className="h-5 w-5" />
+                                            <div className="absolute top-4 right-4 flex space-x-2">
+                                                <button 
+                                                    onClick={() => {
+                                                        setEditingItem(item);
+                                                        setIsModalOpen(true);
+                                                    }}
+                                                    className="h-10 w-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center text-white shadow-lg hover:bg-white hover:text-slate-900 transition-all border border-white/30"
+                                                >
+                                                    <Sparkles className="h-4 w-4" />
+                                                </button>
+                                                <button 
+                                                    onClick={() => handleDeleteItem(item.id)}
+                                                    className="h-10 w-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center text-white shadow-lg hover:bg-rose-500 transition-all border border-white/30"
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </button>
                                             </div>
                                         </div>
                                         <div className="p-8 space-y-6">
@@ -343,9 +398,13 @@ const EventDetails = () => {
 
             <AddItemModal
                 isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                onClose={() => {
+                    setIsModalOpen(false);
+                    setEditingItem(null);
+                }}
                 eventId={event.id}
                 onItemAdded={handleItemAdded}
+                initialData={editingItem}
             />
 
             <ThankYouModal

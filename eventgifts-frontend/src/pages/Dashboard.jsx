@@ -24,12 +24,18 @@ const Dashboard = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
     const [suggestedGiftData, setSuggestedGiftData] = useState(null);
+    const [selectedEventId, setSelectedEventId] = useState(null);
 
     const handleAddSuggestedGift = () => {
         if (events.length === 0) {
             alert("Please create an event first to add gifts to your registry.");
             return;
         }
+        
+        // If multiple events, we'll default to the first but ideally let them pick.
+        // For now, we'll set the selectedEventId to the first one but make it dynamic.
+        setSelectedEventId(events[0].id);
+        
         setSuggestedGiftData({
             title: "Samsung Double Door Fridge",
             price: "850000",
@@ -248,8 +254,11 @@ const Dashboard = () => {
             {events.length > 0 && (
                 <AddItemModal
                     isOpen={isAddItemModalOpen}
-                    onClose={() => setIsAddItemModalOpen(false)}
-                    eventId={events[0].id}
+                    onClose={() => {
+                        setIsAddItemModalOpen(false);
+                        setSuggestedGiftData(null);
+                    }}
+                    eventId={selectedEventId || events[0].id}
                     onItemAdded={(newItem) => {
                         api.get('/events')
                             .then(res => setEvents(res.data))

@@ -33,12 +33,18 @@ const AddItemModal = ({ isOpen, onClose, eventId, onItemAdded, initialData }) =>
         setError('');
 
         try {
-            const response = await api.post(`/events/${eventId}/items`, formData);
-            onItemAdded(response.data);
+            let response;
+            if (initialData?.id) {
+                response = await api.put(`/registry-items/${initialData.id}`, formData);
+                onItemAdded(response.data, true); // true indicates update
+            } else {
+                response = await api.post(`/events/${eventId}/items`, formData);
+                onItemAdded(response.data, false); // false indicates create
+            }
             onClose();
             setFormData({ title: '', description: '', price: '', image_url: '' });
         } catch (err) {
-            setError(err.response?.data?.message || 'Failed to add item. Please try again.');
+            setError(err.response?.data?.message || 'Failed to save item. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -54,7 +60,7 @@ const AddItemModal = ({ isOpen, onClose, eventId, onItemAdded, initialData }) =>
                         <div className="space-y-1">
                             <h2 className="text-3xl font-serif text-slate-900 dark:text-white flex items-center">
                                 <Sparkles className="h-5 w-5 text-exquisite-gold mr-3" />
-                                Add Registry Item
+                                {initialData ? 'Edit Registry Item' : 'Add Registry Item'}
                             </h2>
                             <p className="text-xs font-medium text-slate-400 italic px-8">Curate your perfect wishlist.</p>
                         </div>
@@ -64,7 +70,7 @@ const AddItemModal = ({ isOpen, onClose, eventId, onItemAdded, initialData }) =>
                     </div>
 
                     {error && (
-                        <div className="mb-8 p-5 bg-rose-50 dark:bg-rose-500/10 border border-border-rose-100 dark:border-rose-500/20 rounded-2xl text-rose-600 dark:text-rose-400 text-sm font-bold text-center animate-shake">
+                        <div className="mb-8 p-5 bg-rose-50 dark:bg-rose-500/10 border border-rose-100 dark:border-rose-500/20 rounded-2xl text-rose-600 dark:text-rose-400 text-sm font-bold text-center animate-shake">
                             {error}
                         </div>
                     )}
@@ -151,7 +157,7 @@ const AddItemModal = ({ isOpen, onClose, eventId, onItemAdded, initialData }) =>
                                 ) : (
                                     <>
                                         <Gift className="h-5 w-5 mr-3" /> 
-                                        <span>Add to Registry</span>
+                                        <span>{initialData ? 'Update Item' : 'Add to Registry'}</span>
                                     </>
                                 )}
                             </button>
