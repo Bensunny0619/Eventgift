@@ -10,7 +10,9 @@ import {
     ChevronRight,
     MoreHorizontal,
     Filter,
-    Loader2
+    Loader2,
+    Trash2,
+    RotateCcw
 } from 'lucide-react';
 import api from '../api/api';
 import InviteGuestModal from '../components/InviteGuestModal';
@@ -21,10 +23,23 @@ const Guests = () => {
     const [guests, setGuests] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+    const [activeMenuId, setActiveMenuId] = useState(null);
+    const menuTimeoutRef = React.useRef(null);
 
     useEffect(() => {
         fetchGuests();
     }, []);
+
+    const handleMouseEnter = (id) => {
+        if (menuTimeoutRef.current) clearTimeout(menuTimeoutRef.current);
+        setActiveMenuId(id);
+    };
+
+    const handleMouseLeave = () => {
+        menuTimeoutRef.current = setTimeout(() => {
+            setActiveMenuId(null);
+        }, 300); // 300ms delay to make it feel smoother
+    };
 
     const fetchGuests = () => {
         setIsLoading(true);
@@ -38,6 +53,32 @@ const Guests = () => {
         // Refresh local list or just fetch again
         fetchGuests();
     };
+
+    const handleDeleteGuest = async (guestId, guestType) => {
+        if (!window.confirm('Are you sure you want to remove this guest?')) return;
+        
+        try {
+            // Strip the prefix from ID if it's an invited guest
+            const realId = guestId.toString().replace('invited-', '');
+            
+            if (guestType === 'invited') {
+                await api.delete(`/guests/${realId}`);
+                setGuests(guests.filter(g => g.id !== guestId));
+            } else {
+                alert('Only explicitly invited guests can be removed from this view. Contributors are automatically tracked.');
+            }
+        } catch (err) {
+            console.error('Failed to delete guest', err);
+            alert('Failed to remove guest. Please try again.');
+        }
+    };
+
+    // Close menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = () => setActiveMenuId(null);
+        window.addEventListener('click', handleClickOutside);
+        return () => window.removeEventListener('click', handleClickOutside);
+    }, []);
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -203,9 +244,75 @@ const Guests = () => {
                                             </span>
                                         </td>
                                         <td className="px-8 py-6 text-right">
-                                            <button className="p-3 text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-white/10 rounded-xl transition-all border border-transparent hover:border-slate-100 dark:hover:border-white/10">
-                                                <MoreHorizontal className="h-5 w-5" />
-                                            </button>
+                                            <div 
+                                                className="relative inline-block"
+                                                onMouseEnter={() => handleMouseEnter(guest.id)}
+                                                onMouseLeave={handleMouseLeave}
+                                            >
+                                                <button 
+                                                    className={`p-3 rounded-xl transition-all duration-300 border ${
+                                                        activeMenuId === guest.id 
+                                                        ? 'text-exquisite-gold bg-exquisite-gold/10 border-exquisite-gold/20 scale-110 shadow-lg shadow-exquisite-gold/10' 
+                                                        : 'text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-white/10 border-transparent hover:border-slate-100 dark:hover:border-white/10'
+                                                    }`}
+                                                >
+                                                    <MoreHorizontal className="h-5 w-5" />
+                                                </button>
+
+                                                <div className={`absolute right-0 top-full mt-1 w-60 origin-top-right z-50 transition-all duration-300 ${
+                                                    activeMenuId === guest.id 
+                                                        ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' 
+                                                        : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'
+                                                }`}>
+                                                    <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 dark:border-white/5 overflow-hidden p-2 space-y-1">
+                                                        {guest.type === 'invited' && guest.email && (
+                                                            <button 
+                                                                onClick={async (e) => {
+                                                                    e.stopPropagation();
+                                                                    const btn = e.currentTarget;
+                                                                    const originalContent = btn.innerHTML;
+                                                                    try {
+                                                                        btn.disabled = true;
+                                                                        btn.innerHTML = '<span class="flex items-center space-x-3"><Loader2 class="h-4 w-4 animate-spin text-exquisite-gold" /><span>Sending...</span></span>';
+                                                                        
+                                                                        const realId = guest.id.toString().replace('invited-', '');
+                                                                        await api.post(`/guests/${realId}/resend-invitation`);
+                                                                        
+                                                                        btn.innerHTML = '<span class="flex items-center space-x-3 text-emerald-500"><CheckCircle2 class="h-4 w-4" /><span>Invitation Sent!</span></span>';
+                                                                        
+                                                                        setTimeout(() => {
+                                                                            btn.disabled = false;
+                                                                            btn.innerHTML = originalContent;
+                                                                            setActiveMenuId(null);
+                                                                        }, 2000);
+                                                                    } catch (err) {
+                                                                        console.error('Failed to resend invite', err);
+                                                                        btn.innerHTML = '<span class="flex items-center space-x-3 text-rose-500"><XCircle class="h-4 w-4" /><span>Failed to send</span></span>';
+                                                                        setTimeout(() => {
+                                                                            btn.disabled = false;
+                                                                            btn.innerHTML = originalContent;
+                                                                        }, 2000);
+                                                                    }
+                                                                }}
+                                                                className="w-full flex items-center space-x-3 px-4 py-3 text-slate-600 dark:text-slate-300 hover:bg-exquisite-gold/10 hover:text-exquisite-gold rounded-xl transition-all text-sm font-bold text-left group/item disabled:opacity-100"
+                                                            >
+                                                                <RotateCcw className="h-4 w-4 text-exquisite-gold group-hover/item:rotate-180 transition-transform duration-500" />
+                                                                <span>Resend Invitation</span>
+                                                            </button>
+                                                        )}
+                                                        <button 
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleDeleteGuest(guest.id, guest.type);
+                                                            }}
+                                                            className="w-full flex items-center space-x-3 px-4 py-3 text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all text-sm font-bold text-left group/item"
+                                                        >
+                                                            <Trash2 className="h-4 w-4 group-hover/item:scale-110 transition-transform" />
+                                                            <span>Remove Guest</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
