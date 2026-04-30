@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\RegistryItemController;
 use App\Http\Controllers\Api\ContributionController;
 use App\Http\Controllers\Api\ThankYouVideoController;
 use App\Http\Controllers\Api\GuestController;
+use App\Http\Controllers\Api\NotificationController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -51,4 +52,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // Guest management
     Route::post('/guests/{guest}/resend-invitation', [GuestController::class, 'resendInvitation']);
     Route::apiResource('guests', GuestController::class)->except(['show']);
+
+    // Notifications
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::put('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
 });

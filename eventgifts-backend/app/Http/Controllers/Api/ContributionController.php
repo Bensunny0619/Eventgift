@@ -30,6 +30,11 @@ class ContributionController extends Controller
             'transaction_reference' => $request->transaction_reference,
         ]);
 
+        $item->load('event.user');
+        if ($item->event && $item->event->user) {
+            $item->event->user->notify(new \App\Notifications\NewContributionNotification($contribution, $item->title, $request->amount));
+        }
+
         return response()->json([
             'message' => 'Contribution pledged successfully. Please verify payment.',
             'contribution' => $contribution
