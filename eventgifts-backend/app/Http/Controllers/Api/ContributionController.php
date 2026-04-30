@@ -27,16 +27,19 @@ class ContributionController extends Controller
             'message_text' => $request->message_text,
             'video_note_url' => $request->video_note_url,
             'status' => 'pledged', // Start as pledged until verified
-            'transaction_reference' => $request->transaction_reference,
+            'transaction_reference' => $request->transaction_reference ?? 'REF-' . strtoupper(uniqid()),
         ]);
 
-        $item->load('event.user');
-        if ($item->event && $item->event->user) {
-            $item->event->user->notify(new \App\Notifications\NewContributionNotification($contribution, $item->title, $request->amount));
+        // Immediately reflect the pledge in the progress bar
+        $item->increment('amount_raised', $request->amount);
+
+        $item->load('event.host');
+        if ($item->event && $item->event->host) {
+            $item->event->host->notify(new \App\Notifications\NewContributionNotification($contribution, $item->title, $request->amount));
         }
 
         return response()->json([
-            'message' => 'Contribution pledged successfully. Please verify payment.',
+            'message' => 'Contribution pledged successfully.',
             'contribution' => $contribution
         ], 201);
     }

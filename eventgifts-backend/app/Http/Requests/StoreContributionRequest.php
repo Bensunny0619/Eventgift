@@ -25,7 +25,7 @@ class StoreContributionRequest extends FormRequest
             'amount' => 'required|numeric|min:1',
             'message_text' => 'nullable|string',
             'video_note_url' => 'nullable|string',
-            'transaction_reference' => 'required|string',
+            'transaction_reference' => 'nullable|string',
         ];
     }
 }
