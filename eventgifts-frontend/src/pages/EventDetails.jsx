@@ -31,11 +31,15 @@ const EventDetails = () => {
     const [activeContribution, setActiveContribution] = useState(null);
     const [isCopied, setIsCopied] = useState(false);
 
-    useEffect(() => {
+    const fetchEvent = () => {
         api.get(`/events/${id}`)
             .then(res => setEvent(res.data))
             .catch(err => console.error(err))
             .finally(() => setIsLoading(false));
+    };
+
+    useEffect(() => {
+        fetchEvent();
     }, [id]);
 
     const handleItemAdded = (newItem, isUpdate = false) => {
@@ -372,7 +376,24 @@ const EventDetails = () => {
                                                         <span className="text-[9px] font-black text-slate-300 dark:text-slate-600 uppercase tracking-widest">
                                                             {timeAgo}
                                                         </span>
-                                                        {(c.status === 'verified' || c.status === 'paid') && !c.thank_you_video ? (
+                                                        {c.status === 'pledged' ? (
+                                                            <button
+                                                                onClick={async () => {
+                                                                    try {
+                                                                        await api.post(`/contributions/${c.id}/verify`, {
+                                                                            transaction_reference: c.transaction_reference
+                                                                        });
+                                                                        fetchEvent();
+                                                                    } catch (err) {
+                                                                        console.error(err);
+                                                                        alert("Failed to verify payment.");
+                                                                    }
+                                                                }}
+                                                                className="px-5 py-2.5 bg-exquisite-gold text-white text-[9px] font-black rounded-xl hover:scale-105 active:scale-95 transition-all uppercase tracking-widest shadow-lg shadow-exquisite-gold/20"
+                                                            >
+                                                                Verify Payment
+                                                            </button>
+                                                        ) : (c.status === 'verified' || c.status === 'paid') && !c.thank_you_video ? (
                                                             <button
                                                                 onClick={() => {
                                                                     setActiveContribution(c.id);

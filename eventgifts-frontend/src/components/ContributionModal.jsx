@@ -9,6 +9,7 @@ const ContributionModal = ({ isOpen, onClose, item, onSuccess }) => {
     const [error, setError] = useState('');
     const [pledgeSuccess, setPledgeSuccess] = useState(false);
     const [pledgeData, setPledgeData] = useState(null);
+    const [autoVerify, setAutoVerify] = useState(true);
 
     useEffect(() => {
         if (isOpen && item) {
@@ -53,7 +54,20 @@ const ContributionModal = ({ isOpen, onClose, item, onSuccess }) => {
                 amount: parseFloat(amount),
                 message_text: message
             });
-            setPledgeData(response.data.contribution);
+            const contrib = response.data.contribution;
+
+            if (autoVerify) {
+                try {
+                    const verifyRes = await api.post(`/contributions/${contrib.id}/verify`, {
+                        transaction_reference: contrib.transaction_reference
+                    });
+                    contrib.status = 'paid';
+                } catch (verifyErr) {
+                    console.error("Auto-verification failed", verifyErr);
+                }
+            }
+
+            setPledgeData(contrib);
             setPledgeSuccess(true);
             // Refresh the registry immediately in the background
             if (onSuccess) onSuccess();
@@ -173,6 +187,20 @@ const ContributionModal = ({ isOpen, onClose, item, onSuccess }) => {
                                 {error}
                             </div>
                         )}
+
+                        {/* Sandbox Mode Toggle */}
+                        <div className="flex items-center space-x-3 p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5">
+                            <input
+                                id="sandbox-verify"
+                                type="checkbox"
+                                checked={autoVerify}
+                                onChange={(e) => setAutoVerify(e.target.checked)}
+                                className="h-5 w-5 rounded border-slate-300 text-exquisite-gold focus:ring-exquisite-gold/30 cursor-pointer"
+                            />
+                            <label htmlFor="sandbox-verify" className="text-xs font-semibold text-slate-600 dark:text-slate-400 cursor-pointer select-none">
+                                <span className="font-bold text-exquisite-gold">Sandbox Mode:</span> Auto-approve & credit registry instantly
+                            </label>
+                        </div>
 
                         <button
                             type="submit"

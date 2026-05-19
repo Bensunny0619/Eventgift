@@ -23,6 +23,7 @@ const Navbar = ({ toggleSidebar, isDashboard, isSidebarOpen }) => {
     const [showNotifications, setShowNotifications] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
+    const [showProfileMenu, setShowProfileMenu] = useState(false);
 
     const fetchNotifications = async () => {
         if (!user) return;
@@ -178,7 +179,10 @@ const Navbar = ({ toggleSidebar, isDashboard, isSidebarOpen }) => {
                                     </button>
                                 </div>
 
-                                <div className="flex items-center space-x-4 pl-2 group cursor-pointer relative">
+                                <div 
+                                    onClick={() => setShowProfileMenu(!showProfileMenu)}
+                                    className="flex items-center space-x-4 pl-2 group cursor-pointer relative"
+                                >
                                     <div className="text-right hidden sm:block">
                                         <p className="text-sm font-bold text-slate-900 dark:text-white leading-tight">{user.name}</p>
                                     </div>
@@ -191,6 +195,24 @@ const Navbar = ({ toggleSidebar, isDashboard, isSidebarOpen }) => {
                                             )}
                                         </div>
                                     </div>
+
+                                    {/* Dropdown Menu */}
+                                    {showProfileMenu && (
+                                        <div className="absolute top-[120%] right-0 w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-100 dark:border-white/5 overflow-hidden py-2 z-[70] animate-in fade-in slide-in-from-top-2 duration-200">
+                                            <Link to="/dashboard" className="block px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-exquisite-gold transition-colors">
+                                                Dashboard
+                                            </Link>
+                                            <Link to="/settings" className="block px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-exquisite-gold transition-colors">
+                                                Settings
+                                            </Link>
+                                            <button 
+                                                onClick={logout} 
+                                                className="w-full text-left block px-6 py-3 text-sm font-bold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition-colors border-t border-slate-50 dark:border-white/5"
+                                            >
+                                                Sign Out
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ) : (
