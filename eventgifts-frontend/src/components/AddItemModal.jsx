@@ -7,7 +7,8 @@ const AddItemModal = ({ isOpen, onClose, eventId, onItemAdded, initialData }) =>
         title: '',
         description: '',
         price: '',
-        image_url: ''
+        image_url: '',
+        is_split_allowed: true
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
@@ -18,10 +19,11 @@ const AddItemModal = ({ isOpen, onClose, eventId, onItemAdded, initialData }) =>
                 title: initialData.title || '',
                 description: initialData.description || '',
                 price: initialData.price || '',
-                image_url: initialData.image_url || ''
+                image_url: initialData.image_url || '',
+                is_split_allowed: initialData.is_split_allowed !== undefined ? !!initialData.is_split_allowed : true
             });
         } else if (isOpen) {
-            setFormData({ title: '', description: '', price: '', image_url: '' });
+            setFormData({ title: '', description: '', price: '', image_url: '', is_split_allowed: true });
         }
     }, [isOpen, initialData]);
 
@@ -42,7 +44,7 @@ const AddItemModal = ({ isOpen, onClose, eventId, onItemAdded, initialData }) =>
                 onItemAdded(response.data, false); // false indicates create
             }
             onClose();
-            setFormData({ title: '', description: '', price: '', image_url: '' });
+            setFormData({ title: '', description: '', price: '', image_url: '', is_split_allowed: true });
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to save item. Please try again.');
         } finally {
@@ -143,6 +145,22 @@ const AddItemModal = ({ isOpen, onClose, eventId, onItemAdded, initialData }) =>
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                 />
+                            </div>
+
+                            <div className="flex items-center justify-between p-5 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5">
+                                <div className="space-y-1">
+                                    <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200">Allow Split Payments / Crowdfunding</h4>
+                                    <p className="text-[11px] text-slate-400 font-medium">Allow guests to pledge custom amounts toward this item.</p>
+                                </div>
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                    <input 
+                                        type="checkbox" 
+                                        className="sr-only peer"
+                                        checked={formData.is_split_allowed}
+                                        onChange={(e) => setFormData({ ...formData, is_split_allowed: e.target.checked })}
+                                    />
+                                    <div className="w-11 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-exquisite-gold"></div>
+                                </label>
                             </div>
                         </div>
 

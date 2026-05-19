@@ -279,7 +279,16 @@ const EventDetails = () => {
                                         <div className="p-8 space-y-6">
                                             <div>
                                                 <h4 className="text-2xl font-serif text-slate-900 dark:text-white mb-1 group-hover:text-exquisite-gold transition-colors">{item.title}</h4>
-                                                <p className="text-sm font-bold text-exquisite-gold italic">₦{parseFloat(item.price).toLocaleString()}</p>
+                                                <div className="flex items-center gap-2">
+                                                    <p className="text-sm font-bold text-exquisite-gold italic">₦{parseFloat(item.price).toLocaleString()}</p>
+                                                    <span className={`text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-widest ${
+                                                        item.is_split_allowed 
+                                                        ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' 
+                                                        : 'bg-slate-500/10 text-slate-400 border border-slate-500/10'
+                                                    }`}>
+                                                        {item.is_split_allowed ? 'Split' : 'Single'}
+                                                    </span>
+                                                </div>
                                             </div>
                                             
                                             <div className="space-y-3">
@@ -314,53 +323,76 @@ const EventDetails = () => {
                             <div className="py-20 text-center flex flex-col items-center">
                                 <TrendingUp className="h-12 w-12 text-slate-200 dark:text-white/5 mb-4" />
                                 <p className="text-sm font-bold text-slate-400">Awaiting first gift...</p>
+                                <p className="text-xs text-slate-300 dark:text-slate-600 mt-1">Pledges will appear here in real-time.</p>
                             </div>
                         ) : (
                             <div className="space-y-8 max-h-[800px] overflow-y-auto custom-sidebar-scroll pr-4">
-                                {contributions.map((c, idx) => (
-                                    <div key={c.id} className={`pb-8 ${idx !== contributions.length - 1 ? 'border-b border-slate-50 dark:border-white/5' : ''} space-y-4`}>
-                                        <div className="flex justify-between items-start">
-                                            <div className="space-y-1">
-                                                <span className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">₦{parseFloat(c.amount).toLocaleString()}</span>
-                                                <p className="text-[10px] font-black uppercase tracking-widest text-exquisite-gold">Toward {c.itemTitle}</p>
-                                            </div>
-                                            <span className={`text-[9px] font-black uppercase px-3 py-1.5 rounded-lg shadow-sm ${
-                                                c.status === 'verified' || c.status === 'paid' 
-                                                    ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' 
-                                                    : 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
-                                            }`}>
-                                                {c.status}
-                                            </span>
-                                        </div>
-                                        
-                                        {c.message_text && (
-                                            <p className="text-xs text-slate-500 dark:text-slate-400 italic line-clamp-2 leading-relaxed">
-                                                "{c.message_text}"
-                                            </p>
-                                        )}
+                                {contributions.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map((c, idx) => {
+                                    const guestName = c.guest?.name || 'Anonymous Guest';
+                                    const initials = guestName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                                    const timeAgo = (() => {
+                                        const diff = Date.now() - new Date(c.created_at);
+                                        const mins = Math.floor(diff / 60000);
+                                        if (mins < 1) return 'Just now';
+                                        if (mins < 60) return `${mins}m ago`;
+                                        const hrs = Math.floor(mins / 60);
+                                        if (hrs < 24) return `${hrs}h ago`;
+                                        return new Date(c.created_at).toLocaleDateString();
+                                    })();
 
-                                        <div className="flex items-center justify-between pt-2">
-                                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                                                {new Date(c.created_at).toLocaleDateString()}
-                                            </span>
-                                            {(c.status === 'verified' || c.status === 'paid') && !c.thank_you_video ? (
-                                                <button
-                                                    onClick={() => {
-                                                        setActiveContribution(c.id);
-                                                        setIsThankYouOpen(true);
-                                                    }}
-                                                    className="px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[9px] font-black rounded-xl hover:scale-105 transition-all uppercase tracking-widest shadow-xl"
-                                                >
-                                                    Send Note
-                                                </button>
-                                            ) : c.thank_you_video ? (
-                                                <div className="text-[9px] text-emerald-500 font-black uppercase tracking-widest flex items-center">
-                                                    <ShieldCheck className="h-3 w-3 mr-1" /> Gratitude Sent
+                                    return (
+                                        <div key={c.id} className={`pb-8 ${idx !== contributions.length - 1 ? 'border-b border-slate-50 dark:border-white/5' : ''} space-y-4`}>
+                                            <div className="flex items-start space-x-4">
+                                                {/* Avatar */}
+                                                <div className="h-10 w-10 rounded-xl gold-gradient flex items-center justify-center text-white text-xs font-black flex-shrink-0 shadow-lg shadow-exquisite-gold/20">
+                                                    {initials}
                                                 </div>
-                                            ) : null}
+                                                <div className="flex-grow min-w-0">
+                                                    <div className="flex justify-between items-start">
+                                                        <div>
+                                                            <p className="text-sm font-bold text-slate-900 dark:text-white">{guestName}</p>
+                                                            <p className="text-[10px] font-black uppercase tracking-widest text-exquisite-gold">₦{parseFloat(c.amount).toLocaleString()} → {c.itemTitle}</p>
+                                                        </div>
+                                                        <span className={`text-[9px] font-black uppercase px-3 py-1.5 rounded-lg shadow-sm flex-shrink-0 ml-2 ${
+                                                            c.status === 'verified' || c.status === 'paid'
+                                                                ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                                                                : 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
+                                                        }`}>
+                                                            {c.status}
+                                                        </span>
+                                                    </div>
+
+                                                    {c.message_text && (
+                                                        <p className="text-xs text-slate-500 dark:text-slate-400 italic line-clamp-2 leading-relaxed mt-2">
+                                                            "{c.message_text}"
+                                                        </p>
+                                                    )}
+
+                                                    <div className="flex items-center justify-between pt-3">
+                                                        <span className="text-[9px] font-black text-slate-300 dark:text-slate-600 uppercase tracking-widest">
+                                                            {timeAgo}
+                                                        </span>
+                                                        {(c.status === 'verified' || c.status === 'paid') && !c.thank_you_video ? (
+                                                            <button
+                                                                onClick={() => {
+                                                                    setActiveContribution(c.id);
+                                                                    setIsThankYouOpen(true);
+                                                                }}
+                                                                className="px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[9px] font-black rounded-xl hover:scale-105 transition-all uppercase tracking-widest shadow-xl"
+                                                            >
+                                                                Send Note
+                                                            </button>
+                                                        ) : c.thank_you_video ? (
+                                                            <div className="text-[9px] text-emerald-500 font-black uppercase tracking-widest flex items-center">
+                                                                <ShieldCheck className="h-3 w-3 mr-1" /> Gratitude Sent
+                                                            </div>
+                                                        ) : null}
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
                     </div>

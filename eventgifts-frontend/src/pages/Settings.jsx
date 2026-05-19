@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
     User, 
     Shield, 
@@ -17,14 +17,20 @@ import {
     Loader2
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import api from '../api/api';
 
 const Settings = () => {
     const { user, updateUser } = useAuth();
+    const { isDarkMode, toggleTheme } = useTheme();
     const [showPassword, setShowPassword] = useState(false);
     const [activeTab, setActiveTab] = useState('Profile');
     const [isSaving, setIsSaving] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
+    const [animationsEnabled, setAnimationsEnabled] = useState(true);
+    const [hapticEnabled, setHapticEnabled] = useState(false);
+    const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+    const fileInputRef = useRef(null);
 
     const [profileData, setProfileData] = useState({
         name: '',
@@ -55,11 +61,58 @@ const Settings = () => {
         }
     };
 
+    const handleAvatarUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setIsUploadingAvatar(true);
+        const formData = new FormData();
+        formData.append('avatar', file);
+
+        try {
+            const res = await api.post('/profile/avatar', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            updateUser(res.data.user);
+            setMessage({ type: 'success', text: 'Avatar updated successfully!' });
+        } catch (err) {
+            setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to upload avatar.' });
+        } finally {
+            setIsUploadingAvatar(false);
+        }
+    };
+
     const tabs = [
         { name: 'Profile', icon: User },
         { name: 'Security', icon: Shield },
         { name: 'Experience', icon: Palette },
         { name: 'Notifications', icon: Bell },
+    ];
+
+    const experiencePrefs = [
+        {
+            label: 'Dark Mode',
+            desc: 'Enable dark mode for a better nighttime experience.',
+            icon: isDarkMode ? Moon : Sun,
+            active: isDarkMode,
+            toggle: toggleTheme,
+        },
+        {
+            label: 'Enable Animations',
+            desc: 'Smooth transitions throughout the platform.',
+            icon: Globe,
+            active: animationsEnabled,
+            toggle: () => setAnimationsEnabled(v => !v),
+        },
+        {
+            label: 'Haptic Feedback',
+            desc: 'Subtle vibration feedback during interactions.',
+            icon: Smartphone,
+            active: hapticEnabled,
+            toggle: () => setHapticEnabled(v => !v),
+        },
     ];
 
     return (
@@ -77,10 +130,28 @@ const Settings = () => {
                 <div className="absolute top-0 right-0 h-64 w-64 gold-gradient opacity-10 blur-3xl -translate-y-1/2 translate-x-1/2 rounded-full"></div>
                 <div className="relative group">
                     <div className="h-32 w-32 rounded-[2.5rem] gold-gradient flex items-center justify-center text-white text-4xl font-serif shadow-2xl relative z-10 overflow-hidden">
-                        {user?.name?.charAt(0) || 'U'}
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
-                            <Camera className="h-8 w-8 text-white" />
+                        {user?.avatar_url ? (
+                            <img src={`${(import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api').replace('/api', '')}${user.avatar_url}`} alt="Avatar" className="w-full h-full object-cover" />
+                        ) : (
+                            user?.name?.charAt(0) || 'U'
+                        )}
+                        <div 
+                            onClick={() => fileInputRef.current?.click()}
+                            className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+                        >
+                            {isUploadingAvatar ? (
+                                <Loader2 className="h-8 w-8 text-white animate-spin" />
+                            ) : (
+                                <Camera className="h-8 w-8 text-white" />
+                            )}
                         </div>
+                        <input 
+                            type="file" 
+                            ref={fileInputRef} 
+                            className="hidden" 
+                            accept="image/*"
+                            onChange={handleAvatarUpload}
+                        />
                     </div>
                 </div>
                 <div className="flex-grow text-center md:text-left relative z-10">
@@ -178,6 +249,7 @@ const Settings = () => {
                                             className="w-full pl-14 pr-16 py-5 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-exquisite-gold/20 transition-all font-medium"
                                         />
                                         <button 
+                                            type="button"
                                             onClick={() => setShowPassword(!showPassword)}
                                             className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 hover:text-exquisite-gold transition-colors"
                                         >
@@ -214,11 +286,7 @@ const Settings = () => {
                         <div className="exquisite-card p-10 space-y-10 animate-in fade-in slide-in-from-right-4 duration-500">
                             <h3 className="text-2xl font-serif text-slate-900 dark:text-white">Experience Preferences</h3>
                             <div className="space-y-6">
-                                {[
-                                    { label: 'Dark Mode', desc: 'Enable dark mode for a better nighttime experience.', icon: Moon, active: true },
-                                    { label: 'Enable Animations', desc: 'Smooth transitions throughout the platform.', icon: Globe, active: true },
-                                    { label: 'Haptic Feedback', desc: 'Subtle vibration feedback during interactions.', icon: Smartphone, active: false },
-                                ].map((pref, i) => (
+                                {experiencePrefs.map((pref, i) => (
                                     <div key={i} className="flex items-center justify-between p-6 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 group hover:border-exquisite-gold/30 transition-all">
                                         <div className="flex items-center space-x-6">
                                             <div className="h-12 w-12 rounded-xl gold-gradient flex items-center justify-center text-white shadow-lg">
@@ -229,11 +297,27 @@ const Settings = () => {
                                                 <p className="text-xs text-slate-400 font-medium italic mt-1">{pref.desc}</p>
                                             </div>
                                         </div>
-                                        <button className={`h-8 w-14 rounded-full transition-all relative flex items-center ${pref.active ? 'bg-slate-900 dark:bg-exquisite-gold shadow-inner' : 'bg-slate-200 dark:bg-white/10'}`}>
-                                            <div className={`h-6 w-6 rounded-full bg-white shadow-md transition-all absolute ${pref.active ? 'translate-x-7' : 'translate-x-1'}`}></div>
+                                        <button
+                                            type="button"
+                                            onClick={pref.toggle}
+                                            className={`h-8 w-14 rounded-full transition-all duration-300 relative flex items-center flex-shrink-0 ${pref.active ? 'bg-slate-900 dark:bg-exquisite-gold shadow-inner' : 'bg-slate-200 dark:bg-white/10'}`}
+                                        >
+                                            <div className={`h-6 w-6 rounded-full bg-white shadow-md transition-all duration-300 absolute ${pref.active ? 'translate-x-7' : 'translate-x-1'}`}></div>
                                         </button>
                                     </div>
                                 ))}
+                            </div>
+                            <p className="text-xs text-slate-400 italic">Preferences are saved automatically and persist across sessions.</p>
+                        </div>
+                    )}
+
+                    {activeTab === 'Notifications' && (
+                        <div className="exquisite-card p-10 space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                            <h3 className="text-2xl font-serif text-slate-900 dark:text-white">Notification Preferences</h3>
+                            <p className="text-sm text-slate-400 italic font-medium">Manage how and when you receive updates from Eventgift.</p>
+                            <div className="py-12 text-center text-slate-400">
+                                <Bell className="h-12 w-12 mx-auto mb-4 opacity-20" />
+                                <p className="text-sm font-bold">Notification controls coming soon.</p>
                             </div>
                         </div>
                     )}
@@ -244,3 +328,5 @@ const Settings = () => {
 };
 
 export default Settings;
+
+

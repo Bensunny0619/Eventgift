@@ -184,7 +184,11 @@ const Navbar = ({ toggleSidebar, isDashboard, isSidebarOpen }) => {
                                     </div>
                                     <div className="h-12 w-12 rounded-2xl bg-exquisite-gold/10 border border-exquisite-gold/20 p-1">
                                         <div className="h-full w-full bg-slate-200 dark:bg-slate-700 rounded-xl overflow-hidden">
-                                            <User className="h-full w-full p-2 text-slate-500" />
+                                            {user.avatar_url ? (
+                                                <img src={`${(import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api').replace('/api', '')}${user.avatar_url}`} alt="Avatar" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <User className="h-full w-full p-2 text-slate-500" />
+                                            )}
                                         </div>
                                     </div>
                                 </div>

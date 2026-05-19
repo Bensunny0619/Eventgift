@@ -1,29 +1,52 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Heart, ShieldCheck, Loader2, MessageCircle, Gift } from 'lucide-react';
 import api from '../api/api';
 
 const ContributionModal = ({ isOpen, onClose, item, onSuccess }) => {
-    const [amount, setAmount] = useState(item?.price || '');
+    const [amount, setAmount] = useState('');
     const [message, setMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [pledgeSuccess, setPledgeSuccess] = useState(false);
     const [pledgeData, setPledgeData] = useState(null);
+
+    useEffect(() => {
+        if (isOpen && item) {
+            const remaining = item.price - (item.amount_raised || 0);
+            setAmount(item.is_split_allowed ? remaining : item.price);
+        }
+    }, [isOpen, item]);
+
     const handleClose = () => {
         onClose();
-        // Reset state
         setPledgeSuccess(false);
         setPledgeData(null);
-        setAmount(item?.price || '');
+        setAmount('');
         setMessage('');
     };
 
     if (!isOpen || !item) return null;
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         setError('');
+
+        const remaining = item.price - (item.amount_raised || 0);
+        const floatAmount = parseFloat(amount);
+
+        if (item.is_split_allowed) {
+            if (floatAmount > remaining) {
+                setError(`Your contribution cannot exceed the remaining balance of ₦${remaining.toLocaleString()}.`);
+                setIsLoading(false);
+                return;
+            }
+        } else {
+            if (floatAmount !== parseFloat(item.price)) {
+                setError(`This item does not allow split payments. You must contribute the full price of ₦${parseFloat(item.price).toLocaleString()}.`);
+                setIsLoading(false);
+                return;
+            }
+        }
 
         try {
             const response = await api.post(`/registry-items/${item.id}/contribute`, {
@@ -94,7 +117,16 @@ const ContributionModal = ({ isOpen, onClose, item, onSuccess }) => {
                         </div>
                         <div>
                             <h4 className="font-bold text-slate-900 dark:text-white tracking-tight">{item.title}</h4>
-                            <p className="text-[11px] text-exquisite-gold font-black uppercase tracking-widest">Target: ₦{parseFloat(item.price).toLocaleString()}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                                <p className="text-[11px] text-exquisite-gold font-black uppercase tracking-widest">Target: ₦{parseFloat(item.price).toLocaleString()}</p>
+                                <span className={`text-[9px] px-2 py-0.5 rounded-md font-black uppercase tracking-widest ${
+                                    item.is_split_allowed 
+                                    ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20' 
+                                    : 'bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-500/20'
+                                }`}>
+                                    {item.is_split_allowed ? 'Crowdfunded' : 'Single Buyer'}
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -105,11 +137,19 @@ const ContributionModal = ({ isOpen, onClose, item, onSuccess }) => {
                                 type="number"
                                 step="0.01"
                                 required
-                                className="block w-full px-6 py-5 bg-slate-50 dark:bg-white/5 border-2 border-transparent focus:border-exquisite-gold/20 rounded-2xl text-3xl font-serif text-slate-900 dark:text-white focus:outline-none transition-all placeholder-slate-300 dark:placeholder-slate-700"
+                                disabled={!item.is_split_allowed}
+                                className={`block w-full px-6 py-5 bg-slate-50 dark:bg-white/5 border-2 border-transparent focus:border-exquisite-gold/20 rounded-2xl text-3xl font-serif text-slate-900 dark:text-white focus:outline-none transition-all placeholder-slate-300 dark:placeholder-slate-700 ${
+                                    !item.is_split_allowed ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800/50 text-slate-400 font-bold' : ''
+                                }`}
                                 placeholder="0.00"
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value)}
                             />
+                            {!item.is_split_allowed && (
+                                <p className="text-[10px] text-amber-600 dark:text-amber-400 mt-2 font-bold tracking-tight px-2">
+                                    * This item does not support split payments. You must contribute the full amount.
+                                </p>
+                            )}
                         </div>
 
                         <div className="space-y-3">

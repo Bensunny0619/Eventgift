@@ -192,7 +192,16 @@ const PublicEvent = () => {
 
                                     <div className="p-10 space-y-8">
                                         <div className="space-y-4">
-                                            <h3 className="text-3xl font-serif text-slate-900 dark:text-white leading-tight">{item.title}</h3>
+                                            <div className="flex flex-wrap items-center justify-between gap-4">
+                                                <h3 className="text-3xl font-serif text-slate-900 dark:text-white leading-tight">{item.title}</h3>
+                                                <span className={`text-[9px] px-2 py-1 rounded-md font-black uppercase tracking-widest ${
+                                                    item.is_split_allowed 
+                                                    ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20' 
+                                                    : 'bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-500/20'
+                                                }`}>
+                                                    {item.is_split_allowed ? 'Split Allowed' : 'Single Buyer'}
+                                                </span>
+                                            </div>
                                             <p className="text-2xl font-serif text-exquisite-gold">₦{parseFloat(item.price).toLocaleString()}</p>
                                             <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed italic line-clamp-2">
                                                 {item.description || 'A beautiful gift for our special day.'}
