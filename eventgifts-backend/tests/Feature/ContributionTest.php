@@ -59,4 +59,43 @@ class ContributionTest extends TestCase
             'status' => 'pledged'
         ]);
     }
+
+    public function test_overfunding_is_prevented()
+    {
+        $item = RegistryItem::factory()->create([
+            'price' => 100.00,
+            'amount_raised' => 80.00,
+            'is_split_allowed' => true
+        ]);
+
+        $response = $this->postJson("/api/registry-items/{$item->id}/contribute", [
+            'amount' => 30.00 // Over limit (remaining is 20)
+        ]);
+
+        $response->assertStatus(422)
+                 ->assertJsonFragment(['message' => 'Your contribution exceeds the remaining amount required for this item.']);
+    }
+
+    public function test_partial_funding_rejected_when_split_payments_disabled()
+    {
+        $item = RegistryItem::factory()->create([
+            'price' => 100.00,
+            'amount_raised' => 0.00,
+            'is_split_allowed' => false
+        ]);
+
+        $response = $this->postJson("/api/registry-items/{$item->id}/contribute", [
+            'amount' => 50.00 // Partial payment rejected because split payments are disabled
+        ]);
+
+        $response->assertStatus(422)
+                 ->assertJsonFragment(['message' => 'This item does not allow split payments. You must contribute the full price.']);
+
+        // A full price contribution should succeed
+        $responseSuccess = $this->postJson("/api/registry-items/{$item->id}/contribute", [
+            'amount' => 100.00
+        ]);
+
+        $responseSuccess->assertStatus(201);
+    }
 }

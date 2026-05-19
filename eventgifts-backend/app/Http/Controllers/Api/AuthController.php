@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
@@ -67,6 +68,32 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Profile updated successfully',
+            'user' => $user
+        ]);
+    }
+
+    public function uploadAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => ['required', 'image', 'max:2048'], // max 2MB
+        ]);
+
+        $user = $request->user();
+
+        // Delete old avatar if it exists in storage
+        if ($user->avatar_url && str_contains($user->avatar_url, 'storage/')) {
+            $oldPath = str_replace('/storage/', 'public/', $user->avatar_url);
+            Storage::delete($oldPath);
+        }
+
+        $path = $request->file('avatar')->store('avatars', 'public');
+        $avatarUrl = '/storage/' . $path;
+
+        $user->update(['avatar_url' => $avatarUrl]);
+
+        return response()->json([
+            'message' => 'Avatar updated successfully',
+            'avatar_url' => $avatarUrl,
             'user' => $user
         ]);
     }

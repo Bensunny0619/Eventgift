@@ -21,6 +21,21 @@ class ContributionController extends Controller
 
     public function store(StoreContributionRequest $request, RegistryItem $item)
     {
+        if ($item->price !== null) {
+            $remaining = $item->price - $item->amount_raised;
+            if ($remaining <= 0) {
+                return response()->json(['message' => 'This item is already fully funded.'], 422);
+            }
+
+            if ($request->amount > $remaining) {
+                return response()->json(['message' => 'Your contribution exceeds the remaining amount required for this item.'], 422);
+            }
+
+            if (!$item->is_split_allowed && $request->amount != $item->price) {
+                return response()->json(['message' => 'This item does not allow split payments. You must contribute the full price.'], 422);
+            }
+        }
+
         $contribution = $item->contributions()->create([
             'guest_id' => Auth::id(),
             'amount' => $request->amount,
@@ -30,8 +45,7 @@ class ContributionController extends Controller
             'transaction_reference' => $request->transaction_reference ?? 'REF-' . strtoupper(uniqid()),
         ]);
 
-        // Immediately reflect the pledge in the progress bar
-        $item->increment('amount_raised', $request->amount);
+        // Balance will increment upon successful verification
 
         $item->load('event.host');
         if ($item->event && $item->event->host) {
