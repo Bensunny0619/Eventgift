@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../api/api';
 import {
@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import ContributionModal from '../components/ContributionModal';
 import VerifyPledgeModal from '../components/VerifyPledgeModal';
+import RSVPModal from '../components/RSVPModal';
 
 const PublicEvent = () => {
     const { id } = useParams();
@@ -28,17 +29,42 @@ const PublicEvent = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [isCopied, setIsCopied] = useState(false);
     const [giftLaterToast, setGiftLaterToast] = useState('');
+    const [guest, setGuest] = useState(null);
+    const [isRsvpOpen, setIsRsvpOpen] = useState(false);
+    const [rsvpToast, setRsvpToast] = useState('');
 
-    const fetchEvent = () => {
+    useEffect(() => {
+        const guestId = new URLSearchParams(window.location.search).get('guest_id');
+        if (guestId) {
+            api.get(`/guests/${guestId}/public`)
+                .then(res => setGuest(res.data))
+                .catch(err => console.error('Failed to fetch personalized guest details', err));
+        }
+    }, []);
+
+    const handlePersonalizedRsvp = async (newStatus) => {
+        if (!guest) return;
+        try {
+            const res = await api.post(`/guests/${guest.id}/rsvp`, { status: newStatus });
+            setGuest(res.data.guest);
+            setRsvpToast(`Thank you! Your RSVP has been updated to ${newStatus === 'Confirmed' ? 'Attending' : 'Declining'}.`);
+            setTimeout(() => setRsvpToast(''), 4000);
+        } catch (err) {
+            console.error(err);
+            alert('Failed to update RSVP. Please try again.');
+        }
+    };
+
+    const fetchEvent = useCallback(() => {
         api.get(`/events/${id}/public`)
             .then(res => setEvent(res.data))
             .catch(err => console.error(err))
             .finally(() => setIsLoading(false));
-    };
+    }, [id]);
 
     useEffect(() => {
         fetchEvent();
-    }, [id]);
+    }, [id, fetchEvent]);
 
     const handleShare = () => {
         const url = window.location.href;
@@ -80,8 +106,31 @@ const PublicEvent = () => {
         return matchesTab && matchesSearch;
     }) || [];
 
+    const themeColors = {
+        'exquisite-gold': '#D4AF37',
+        'rose-gold': '#B76E79',
+        'emerald': '#50C878',
+        'midnight-blue': '#191970',
+    };
+
+    const themeStyle = {
+        '--color-exquisite-gold': themeColors[event.theme_color] || themeColors['exquisite-gold']
+    };
+
     return (
-        <div className="bg-exquisite-cream dark:bg-exquisite-midnight min-h-screen text-slate-900 dark:text-white transition-colors duration-500">
+        <div style={themeStyle} className="bg-exquisite-cream dark:bg-exquisite-midnight min-h-screen text-slate-900 dark:text-white transition-colors duration-500">
+
+            {/* Optional Cover Image Banner */}
+            {event.cover_image_url && (
+                <div className="w-full h-[40vh] sm:h-[50vh] relative">
+                    <img 
+                        src={`${(import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api').replace('/api', '')}${event.cover_image_url}`} 
+                        alt="Event Cover" 
+                        className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-exquisite-cream dark:from-exquisite-midnight to-transparent"></div>
+                </div>
+            )}
 
             {/* Gift Later Toast */}
             {giftLaterToast && (
@@ -91,7 +140,48 @@ const PublicEvent = () => {
                 </div>
             )}
 
+            {/* RSVP Toast */}
+            {rsvpToast && (
+                <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] flex items-center space-x-3 px-8 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-3 duration-300">
+                    <Users className="h-5 w-5 text-exquisite-gold flex-shrink-0" />
+                    <p className="text-sm font-bold">{rsvpToast}</p>
+                </div>
+            )}
+
             <header className="pt-20 pb-16 border-b border-slate-100 dark:border-white/5">
+                {/* Personalized Greeting Card */}
+                {guest && (
+                    <div className="max-w-[1400px] mx-auto px-10 pb-12 animate-in fade-in slide-in-from-top-3 duration-500">
+                        <div className="exquisite-card p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 border border-emerald-500/10 bg-emerald-500/[0.02]">
+                            <div className="space-y-2 text-center sm:text-left">
+                                <h3 className="text-2xl font-serif">Welcome, <span className="text-exquisite-gold">{guest.name}</span>!</h3>
+                                <p className="text-xs text-slate-400 font-medium italic">You are cordially invited to celebrate with us. Your RSVP is currently <span className={`font-bold ${guest.status === 'Confirmed' ? 'text-emerald-500' : guest.status === 'Declined' ? 'text-rose-500' : 'text-amber-500'}`}>{guest.status === 'Confirmed' ? 'Attending' : guest.status === 'Declined' ? 'Declined' : 'Pending'}</span>.</p>
+                            </div>
+                            <div className="flex items-center space-x-3 w-full sm:w-auto">
+                                <button
+                                    onClick={() => handlePersonalizedRsvp('Confirmed')}
+                                    className={`flex-1 sm:flex-initial px-6 py-3.5 rounded-xl font-bold uppercase text-[9px] tracking-widest border transition-all ${
+                                        guest.status === 'Confirmed'
+                                            ? 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/10'
+                                            : 'bg-transparent text-slate-400 border-slate-100 dark:border-white/5 hover:border-emerald-500/30'
+                                    }`}
+                                >
+                                    Attending
+                                </button>
+                                <button
+                                    onClick={() => handlePersonalizedRsvp('Declined')}
+                                    className={`flex-1 sm:flex-initial px-6 py-3.5 rounded-xl font-bold uppercase text-[9px] tracking-widest border transition-all ${
+                                        guest.status === 'Declined'
+                                            ? 'bg-rose-500 text-white border-rose-500 shadow-lg shadow-rose-500/10'
+                                            : 'bg-transparent text-slate-400 border-slate-100 dark:border-white/5 hover:border-rose-500/30'
+                                    }`}
+                                >
+                                    Declining
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 <div className="max-w-[1400px] mx-auto px-10">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
                         <div className="space-y-6">
@@ -99,11 +189,24 @@ const PublicEvent = () => {
                                 <Diamond className="h-3.5 w-3.5 text-exquisite-gold" />
                                 <span className="text-[9px] font-black uppercase tracking-[0.3em] text-exquisite-gold">Eventgift Registry</span>
                             </div>
-                            <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif leading-tight">Event Gift Registry</h1>
-                            <p className="text-lg sm:text-xl text-slate-500 dark:text-slate-400 font-medium italic">Support our celebration with a gift from our registry.</p>
+                            <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif leading-tight">{event.title}</h1>
+                            <p className="text-lg sm:text-xl text-slate-500 dark:text-slate-400 font-medium italic">
+                                {event.welcome_message || 'Support our celebration with a gift from our registry.'}
+                            </p>
                         </div>
 
                         <div className="flex items-center space-x-6">
+                            {!guest && (
+                                <button 
+                                    onClick={() => setIsRsvpOpen(true)}
+                                    className="h-14 px-8 border-2 border-exquisite-gold/20 hover:border-exquisite-gold text-exquisite-gold rounded-2xl transition-all flex items-center space-x-3 group font-bold"
+                                >
+                                    <Users className="h-5 w-5" />
+                                    <span className="text-xs font-black uppercase tracking-widest">
+                                        RSVP
+                                    </span>
+                                </button>
+                            )}
                             <button 
                                 onClick={handleShare}
                                 className="p-4 exquisite-glass rounded-2xl text-slate-500 hover:text-exquisite-gold transition-colors flex items-center space-x-3 group relative"
@@ -297,6 +400,16 @@ const PublicEvent = () => {
                 onClose={() => setIsVerifyOpen(false)}
                 onVerified={() => {
                     api.get(`/events/${id}/public`).then(res => setEvent(res.data));
+                }}
+            />
+
+            <RSVPModal
+                isOpen={isRsvpOpen}
+                onClose={() => setIsRsvpOpen(false)}
+                eventId={event.id}
+                onRsvpSubmitted={(newGuest) => {
+                    setRsvpToast(`Thank you, ${newGuest.name}! Your RSVP has been submitted successfully.`);
+                    setTimeout(() => setRsvpToast(''), 4000);
                 }}
             />
 

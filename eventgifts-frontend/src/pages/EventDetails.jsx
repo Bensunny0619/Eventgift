@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../api/api';
 import { 
@@ -15,11 +15,13 @@ import {
     Users,
     TrendingUp,
     Sparkles,
-    Trash2
+    Trash2,
+    Settings
 } from 'lucide-react';
 import AddItemModal from '../components/AddItemModal';
 import ThankYouModal from '../components/ThankYouModal';
 import StatCard from '../components/StatCard';
+import EventSettingsModal from '../components/EventSettingsModal';
 
 const EventDetails = () => {
     const { id } = useParams();
@@ -30,17 +32,18 @@ const EventDetails = () => {
     const [isThankYouOpen, setIsThankYouOpen] = useState(false);
     const [activeContribution, setActiveContribution] = useState(null);
     const [isCopied, setIsCopied] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-    const fetchEvent = () => {
+    const fetchEvent = useCallback(() => {
         api.get(`/events/${id}`)
             .then(res => setEvent(res.data))
             .catch(err => console.error(err))
             .finally(() => setIsLoading(false));
-    };
+    }, [id]);
 
     useEffect(() => {
         fetchEvent();
-    }, [id]);
+    }, [fetchEvent]);
 
     const handleItemAdded = (newItem, isUpdate = false) => {
         if (isUpdate) {
@@ -173,8 +176,16 @@ const EventDetails = () => {
                 </div>
                 <div className="flex items-center space-x-4">
                     <button 
+                        onClick={() => setIsSettingsOpen(true)}
+                        className="h-14 w-14 flex items-center justify-center exquisite-glass rounded-2xl text-slate-500 hover:text-exquisite-gold hover:border-exquisite-gold/30 transition-all shadow-lg group"
+                        title="Event Settings"
+                    >
+                        <Settings className="h-5 w-5 group-hover:rotate-90 transition-transform duration-500" />
+                    </button>
+                    <button 
                         onClick={handleShare}
                         className="h-14 w-14 flex items-center justify-center exquisite-glass rounded-2xl text-slate-500 hover:text-exquisite-gold hover:border-exquisite-gold/30 transition-all shadow-lg group"
+                        title="Share Event"
                     >
                         <Share2 className="h-5 w-5 group-hover:scale-110 transition-transform" />
                     </button>
@@ -465,6 +476,13 @@ const EventDetails = () => {
                 onClose={() => setIsThankYouOpen(false)}
                 contributionId={activeContribution}
                 onVideoSent={handleVideoSent}
+            />
+
+            <EventSettingsModal
+                isOpen={isSettingsOpen}
+                onClose={() => setIsSettingsOpen(false)}
+                event={event}
+                onSuccess={fetchEvent}
             />
         </div>
     );

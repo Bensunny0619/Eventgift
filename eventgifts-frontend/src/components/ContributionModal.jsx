@@ -58,7 +58,7 @@ const ContributionModal = ({ isOpen, onClose, item, onSuccess }) => {
 
             if (autoVerify) {
                 try {
-                    const verifyRes = await api.post(`/contributions/${contrib.id}/verify`, {
+                    await api.post(`/contributions/${contrib.id}/verify`, {
                         transaction_reference: contrib.transaction_reference
                     });
                     contrib.status = 'paid';

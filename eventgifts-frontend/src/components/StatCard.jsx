@@ -1,7 +1,8 @@
 import React from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
-const StatCard = ({ label, value, trend, icon: Icon, color = "gold", badge }) => {
+const StatCard = ({ label, value, trend, icon, color = "gold", badge }) => {
+    const Icon = icon;
     const isPositive = trend?.startsWith('+');
 
     return (

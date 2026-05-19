@@ -35,7 +35,7 @@ const EditEvent = () => {
                     description: res.data.description || ''
                 });
             })
-            .catch(err => setError('Failed to load event details.'))
+            .catch(() => setError('Failed to load event details.'))
             .finally(() => setIsLoading(false));
     }, [id]);
 

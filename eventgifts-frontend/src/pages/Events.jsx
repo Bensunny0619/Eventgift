@@ -13,10 +13,8 @@ import {
     Loader2,
     Sparkles
 } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
 
 const Events = () => {
-    const { user } = useAuth();
     const [events, setEvents] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');

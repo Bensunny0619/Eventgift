@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../api/api';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -19,13 +19,29 @@ import {
 const Navbar = ({ toggleSidebar, isDashboard, isSidebarOpen }) => {
     const { user, logout } = useAuth();
     const { isDarkMode, toggleTheme } = useTheme();
-    const navigate = useNavigate();
     const [showNotifications, setShowNotifications] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
 
-    const fetchNotifications = async () => {
+    const notificationRef = useRef(null);
+    const profileRef = useRef(null);
+
+    // Close dropdowns when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (notificationRef.current && !notificationRef.current.contains(e.target)) {
+                setShowNotifications(false);
+            }
+            if (profileRef.current && !profileRef.current.contains(e.target)) {
+                setShowProfileMenu(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const fetchNotifications = useCallback(async () => {
         if (!user) return;
         try {
             const res = await api.get('/notifications');
@@ -34,13 +50,18 @@ const Navbar = ({ toggleSidebar, isDashboard, isSidebarOpen }) => {
         } catch (error) {
             console.error('Failed to fetch notifications', error);
         }
-    };
+    }, [user]);
 
     useEffect(() => {
-        fetchNotifications();
+        const timeout = setTimeout(() => {
+            fetchNotifications();
+        }, 0);
         const interval = setInterval(fetchNotifications, 30000); // Check every 30s
-        return () => clearInterval(interval);
-    }, [user]);
+        return () => {
+            clearTimeout(timeout);
+            clearInterval(interval);
+        };
+    }, [user, fetchNotifications]);
 
     const markAsRead = async (id) => {
         try {
@@ -110,7 +131,7 @@ const Navbar = ({ toggleSidebar, isDashboard, isSidebarOpen }) => {
 
                         {user ? (
                             <div className="flex items-center space-x-8">
-                                <div className="flex items-center space-x-2 sm:space-x-4 border-r border-slate-200 dark:border-white/10 pr-4 sm:pr-8 relative">
+                                <div ref={notificationRef} className="flex items-center space-x-2 sm:space-x-4 border-r border-slate-200 dark:border-white/10 pr-4 sm:pr-8 relative">
                                     <button 
                                         onClick={() => setShowNotifications(!showNotifications)}
                                         className="relative p-2 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
@@ -180,6 +201,7 @@ const Navbar = ({ toggleSidebar, isDashboard, isSidebarOpen }) => {
                                 </div>
 
                                 <div 
+                                    ref={profileRef}
                                     onClick={() => setShowProfileMenu(!showProfileMenu)}
                                     className="flex items-center space-x-4 pl-2 group cursor-pointer relative"
                                 >

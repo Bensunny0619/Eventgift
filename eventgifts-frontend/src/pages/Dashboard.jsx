@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
 import api from '../api/api';
 import {
     Diamond,
@@ -19,7 +18,6 @@ import StatCard from '../components/StatCard';
 import AddItemModal from '../components/AddItemModal';
 
 const Dashboard = () => {
-    const { user } = useAuth();
     const [events, setEvents] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
@@ -259,7 +257,7 @@ const Dashboard = () => {
                         setSuggestedGiftData(null);
                     }}
                     eventId={selectedEventId || events[0].id}
-                    onItemAdded={(newItem) => {
+                    onItemAdded={() => {
                         api.get('/events')
                             .then(res => setEvents(res.data))
                             .catch(err => console.error('Failed to fetch events', err));

@@ -26,8 +26,19 @@ const Guests = () => {
     const [activeMenuId, setActiveMenuId] = useState(null);
     const menuTimeoutRef = React.useRef(null);
 
+    const fetchGuests = () => {
+        setIsLoading(true);
+        api.get('/guests')
+            .then(res => setGuests(res.data))
+            .catch(err => console.error('Failed to fetch guests', err))
+            .finally(() => setIsLoading(false));
+    };
+
     useEffect(() => {
-        fetchGuests();
+        const t = setTimeout(() => {
+            fetchGuests();
+        }, 0);
+        return () => clearTimeout(t);
     }, []);
 
     const handleMouseEnter = (id) => {
@@ -41,15 +52,9 @@ const Guests = () => {
         }, 300); // 300ms delay to make it feel smoother
     };
 
-    const fetchGuests = () => {
-        setIsLoading(true);
-        api.get('/guests')
-            .then(res => setGuests(res.data))
-            .catch(err => console.error('Failed to fetch guests', err))
-            .finally(() => setIsLoading(false));
-    };
 
-    const handleGuestAdded = (newGuest) => {
+
+    const handleGuestAdded = () => {
         // Refresh local list or just fetch again
         fetchGuests();
     };
@@ -107,10 +112,20 @@ const Guests = () => {
         return matchesSearch && matchesStatus;
     });
 
+    const totalGuests = guests.length;
+    const confirmedCount = guests.filter(g => g.status === 'Confirmed').length;
+    const pendingCount = guests.filter(g => g.status === 'Pending').length;
+    const declinedCount = guests.filter(g => g.status === 'Declined').length;
+
+    const confirmedPct = totalGuests > 0 ? (confirmedCount / totalGuests) * 100 : 0;
+    const pendingPct = totalGuests > 0 ? (pendingCount / totalGuests) * 100 : 0;
+    const declinedPct = totalGuests > 0 ? (declinedCount / totalGuests) * 100 : 0;
+
     const stats = [
-        { label: 'Total Invitees', value: guests.length.toLocaleString(), icon: Users, color: 'text-slate-900 dark:text-white' },
-        { label: 'Confirmed RSVP', value: guests.filter(g => g.status === 'Confirmed').length.toLocaleString(), icon: CheckCircle2, color: 'text-emerald-500' },
-        { label: 'Awaiting Response', value: guests.filter(g => g.status === 'Pending').length.toLocaleString(), icon: Clock, color: 'text-amber-500' },
+        { label: 'Total Invitees', value: totalGuests.toLocaleString(), icon: Users, color: 'text-slate-900 dark:text-white' },
+        { label: 'Confirmed RSVP', value: confirmedCount.toLocaleString(), icon: CheckCircle2, color: 'text-emerald-500' },
+        { label: 'Awaiting Response', value: pendingCount.toLocaleString(), icon: Clock, color: 'text-amber-500' },
+        { label: 'Declined RSVP', value: declinedCount.toLocaleString(), icon: XCircle, color: 'text-rose-500' },
     ];
 
     if (isLoading) {
@@ -141,7 +156,7 @@ const Guests = () => {
             </div>
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {stats.map((stat, i) => (
                     <div key={i} className="exquisite-card p-8 flex items-center space-x-6 border-none">
                         <div className={`h-14 w-14 rounded-2xl bg-slate-50 dark:bg-white/5 flex items-center justify-center`}>
@@ -153,6 +168,67 @@ const Guests = () => {
                         </div>
                     </div>
                 ))}
+            </div>
+
+            {/* RSVP Distribution Premium Bar */}
+            <div className="exquisite-card p-8 border-none space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h3 className="text-xs font-black uppercase tracking-widest text-slate-400">RSVP Distribution</h3>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Real-time attendance breakdown of your guest list</p>
+                    </div>
+                    <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
+                        {confirmedCount} of {totalGuests} Attending ({totalGuests > 0 ? Math.round(confirmedPct) : 0}%)
+                    </span>
+                </div>
+                
+                <div className="h-3.5 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden flex">
+                    {confirmedCount > 0 && (
+                        <div 
+                            style={{ width: `${confirmedPct}%` }} 
+                            className="h-full bg-emerald-500 transition-all duration-500 ease-out relative"
+                            title={`Confirmed: ${confirmedCount} (${Math.round(confirmedPct)}%)`}
+                        />
+                    )}
+                    {pendingCount > 0 && (
+                        <div 
+                            style={{ width: `${pendingPct}%` }} 
+                            className="h-full bg-amber-500 transition-all duration-500 ease-out relative"
+                            title={`Pending: ${pendingCount} (${Math.round(pendingPct)}%)`}
+                        />
+                    )}
+                    {declinedCount > 0 && (
+                        <div 
+                            style={{ width: `${declinedPct}%` }} 
+                            className="h-full bg-rose-500 transition-all duration-500 ease-out relative"
+                            title={`Declined: ${declinedCount} (${Math.round(declinedPct)}%)`}
+                        />
+                    )}
+                    {totalGuests === 0 && (
+                        <div className="h-full w-full bg-slate-200 dark:bg-white/10 transition-all duration-500" />
+                    )}
+                </div>
+
+                <div className="flex flex-wrap gap-x-8 gap-y-3 pt-2">
+                    <div className="flex items-center space-x-2.5">
+                        <span className="h-3 w-3 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
+                        <span className="text-xs font-bold text-slate-600 dark:text-slate-400">
+                            Confirmed RSVP ({confirmedCount} • {totalGuests > 0 ? Math.round(confirmedPct) : 0}%)
+                        </span>
+                    </div>
+                    <div className="flex items-center space-x-2.5">
+                        <span className="h-3 w-3 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.4)]" />
+                        <span className="text-xs font-bold text-slate-600 dark:text-slate-400">
+                            Awaiting Response ({pendingCount} • {totalGuests > 0 ? Math.round(pendingPct) : 0}%)
+                        </span>
+                    </div>
+                    <div className="flex items-center space-x-2.5">
+                        <span className="h-3 w-3 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.4)]" />
+                        <span className="text-xs font-bold text-slate-600 dark:text-slate-400">
+                            Declined RSVP ({declinedCount} • {totalGuests > 0 ? Math.round(declinedPct) : 0}%)
+                        </span>
+                    </div>
+                </div>
             </div>
 
             {/* Search & Filter Bar */}

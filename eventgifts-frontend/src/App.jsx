@@ -39,7 +39,10 @@ function App() {
   // Close sidebar on small screens only when route changes
   useEffect(() => {
     if (window.innerWidth < 1024) {
-      setIsSidebarOpen(false);
+      const t = setTimeout(() => {
+        setIsSidebarOpen(false);
+      }, 0);
+      return () => clearTimeout(t);
     }
   }, [location.pathname]);
 

@@ -19,8 +19,13 @@ const InviteGuestModal = ({ isOpen, onClose, onGuestAdded }) => {
             api.get('/events')
                 .then(res => {
                     setEvents(res.data);
-                    if (res.data.length > 0 && !formData.event_id) {
-                        setFormData(prev => ({ ...prev, event_id: res.data[0].id.toString() }));
+                    if (res.data.length > 0) {
+                        setFormData(prev => {
+                            if (!prev.event_id) {
+                                return { ...prev, event_id: res.data[0].id.toString() };
+                            }
+                            return prev;
+                        });
                     }
                 })
                 .catch(err => console.error('Failed to fetch events', err))
