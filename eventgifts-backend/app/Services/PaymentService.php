@@ -13,9 +13,9 @@ class PaymentService
      */
     public function verifyReference(string $reference, string $gateway = 'paystack'): bool
     {
-        // For development/mocking: references starting with 'TEST_SUCCESS' will pass.
+        // For development/mocking: references starting with 'TEST_SUCCESS' or 'REF-' will pass.
         if (app()->environment('local', 'testing')) {
-            if (str_starts_with($reference, 'TEST_SUCCESS')) {
+            if (str_starts_with($reference, 'TEST_SUCCESS') || str_starts_with($reference, 'REF-')) {
                 return true;
             }
             if (str_starts_with($reference, 'TEST_FAIL')) {

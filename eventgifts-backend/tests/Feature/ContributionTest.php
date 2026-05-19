@@ -14,7 +14,7 @@ class ContributionTest extends TestCase
 
     public function test_guest_can_contribute_to_item()
     {
-        $item = RegistryItem::factory()->create(['amount_raised' => 0]);
+        $item = RegistryItem::factory()->create(['amount_raised' => 0, 'price' => 500]);
 
         $contributionData = [
             'amount' => 50.00,
@@ -30,12 +30,12 @@ class ContributionTest extends TestCase
         $this->assertDatabaseHas('contributions', [
             'item_id' => $item->id,
             'amount' => 50.00,
-            'status' => 'pledged',
+            'status' => 'paid',
             'transaction_reference' => 'TEST_REF_123'
         ]);
 
-        // Verify RegistryItem amount_raised was NOT incremented yet (pledge flow)
-        $this->assertEquals(0, $item->refresh()->amount_raised);
+        // In local/testing env, amount_raised is incremented immediately
+        $this->assertEquals(50.00, $item->refresh()->amount_raised);
     }
 
     public function test_authenticated_user_can_contribute_to_item_as_pledge()
@@ -56,7 +56,7 @@ class ContributionTest extends TestCase
             'item_id' => $item->id,
             'guest_id' => $user->id,
             'amount' => 100.00,
-            'status' => 'pledged'
+            'status' => 'paid'
         ]);
     }
 

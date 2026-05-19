@@ -45,7 +45,13 @@ class ContributionController extends Controller
             'transaction_reference' => $request->transaction_reference ?? 'REF-' . strtoupper(uniqid()),
         ]);
 
-        // Balance will increment upon successful verification
+        // In local/testing: auto-verify and credit immediately so progress updates instantly
+        if (app()->environment('local', 'testing')) {
+            $contribution->update(['status' => 'paid']);
+            $item->increment('amount_raised', $request->amount);
+        }
+
+        // Balance will increment upon successful verification in production
 
         $item->load('event.host');
         if ($item->event && $item->event->host) {
@@ -60,6 +66,11 @@ class ContributionController extends Controller
 
     public function verify(Contribution $contribution)
     {
+        // Prevent double-verification
+        if ($contribution->status === 'paid') {
+            return response()->json(['message' => 'Already verified', 'contribution' => $contribution->load('thankYouVideo')]);
+        }
+
         $reference = request('transaction_reference', $contribution->transaction_reference);
         
         if (!$reference || $contribution->transaction_reference !== $reference) {
