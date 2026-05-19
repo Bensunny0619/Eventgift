@@ -41,7 +41,7 @@ class ContributionTest extends TestCase
     public function test_authenticated_user_can_contribute_to_item_as_pledge()
     {
         $user = User::factory()->create();
-        $item = RegistryItem::factory()->create(['amount_raised' => 0]);
+        $item = RegistryItem::factory()->create(['amount_raised' => 0, 'price' => 500]);
 
         $contributionData = [
             'amount' => 100.00,

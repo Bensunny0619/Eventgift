@@ -19,6 +19,8 @@ class Event extends Model
         'template_id',
         'status',
         'cover_image_url',
+        'theme_color',
+        'welcome_message',
     ];
 
     protected $casts = [
@@ -33,5 +35,10 @@ class Event extends Model
     public function registryItems()
     {
         return $this->hasMany(RegistryItem::class);
+    }
+
+    public function guests()
+    {
+        return $this->hasMany(Guest::class);
     }
 }

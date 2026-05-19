@@ -145,4 +145,56 @@ class GuestController extends Controller
             return response()->json(['message' => 'Failed to send email'], 500);
         }
     }
+
+    public function publicShow(Guest $guest)
+    {
+        return response()->json($guest->load('event.host'));
+    }
+
+    public function rsvp(Request $request, Guest $guest)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:Confirmed,Declined',
+        ]);
+
+        $guest->update($validated);
+
+        return response()->json([
+            'message' => 'RSVP updated successfully',
+            'guest' => $guest
+        ]);
+    }
+
+    public function publicRsvp(Request $request, Event $event)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'status' => 'required|in:Confirmed,Declined',
+        ]);
+
+        $guest = Guest::where('event_id', $event->id)
+            ->where('email', $validated['email'])
+            ->first();
+
+        if ($guest) {
+            $guest->update([
+                'name' => $validated['name'],
+                'status' => $validated['status']
+            ]);
+        } else {
+            $guest = Guest::create([
+                'event_id' => $event->id,
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'status' => $validated['status'],
+                'tier' => 'Standard'
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'RSVP submitted successfully',
+            'guest' => $guest
+        ]);
+    }
 }

@@ -14,7 +14,7 @@ class PaymentVerificationTest extends TestCase
 
     public function test_contribution_auto_verifies_in_local_environment()
     {
-        $item = RegistryItem::factory()->create(['amount_raised' => 0]);
+        $item = RegistryItem::factory()->create(['amount_raised' => 0, 'price' => 500]);
 
         $response = $this->postJson("/api/registry-items/{$item->id}/contribute", [
             'amount' => 100,
@@ -31,7 +31,7 @@ class PaymentVerificationTest extends TestCase
 
     public function test_successful_verification_updates_status_and_increments_balance()
     {
-        $item = RegistryItem::factory()->create(['amount_raised' => 0]);
+        $item = RegistryItem::factory()->create(['amount_raised' => 0, 'price' => 500]);
         $contribution = Contribution::factory()->create([
             'item_id' => $item->id,
             'amount' => 100,
@@ -51,7 +51,7 @@ class PaymentVerificationTest extends TestCase
 
     public function test_failed_verification_does_not_update_status_or_balance()
     {
-        $item = RegistryItem::factory()->create(['amount_raised' => 0]);
+        $item = RegistryItem::factory()->create(['amount_raised' => 0, 'price' => 500]);
         $contribution = Contribution::factory()->create([
             'item_id' => $item->id,
             'amount' => 100,

@@ -32,6 +32,9 @@ Route::post('/contributions/{contribution}/verify', [ContributionController::cla
 Route::get('/contributions/{contribution}/thank-you', [ThankYouVideoController::class, 'show']);
 
 Route::get('/events/{event}/public', [EventController::class, 'publicShow']);
+Route::get('/guests/{guest}/public', [GuestController::class, 'publicShow']);
+Route::post('/guests/{guest}/rsvp', [GuestController::class, 'rsvp']);
+Route::post('/events/{event}/rsvp', [GuestController::class, 'publicRsvp']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -40,6 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/profile/avatar', [AuthController::class, 'uploadAvatar']);
     
     Route::apiResource('events', EventController::class);
+    Route::post('/events/{event}/cover', [EventController::class, 'uploadCover']);
 
     // Registry Items
     Route::get('/events/{event}/items', [RegistryItemController::class, 'index']);

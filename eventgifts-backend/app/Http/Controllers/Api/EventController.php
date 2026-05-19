@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
@@ -38,7 +39,7 @@ class EventController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        return response()->json($event->load(['registryItems.contributions.guest', 'host']));
+        return response()->json($event->load(['registryItems.contributions.guest', 'host', 'guests']));
     }
 
     public function publicShow(Event $event)
@@ -59,13 +60,39 @@ class EventController extends Controller
             'location' => 'nullable|string',
             'location_coords' => 'nullable|string',
             'template_id' => 'nullable|string',
-            'cover_image_url' => 'nullable|url',
+            'cover_image_url' => 'nullable|string',
             'status' => 'sometimes|required|string|in:active,past,cancelled',
+            'theme_color' => 'nullable|string',
+            'welcome_message' => 'nullable|string',
         ]);
 
         $event->update($validated);
 
         return response()->json($event);
+    }
+
+    public function uploadCover(Request $request, Event $event)
+    {
+        if ($event->host_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $request->validate([
+            'cover_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB max
+        ]);
+
+        if ($request->hasFile('cover_image')) {
+            $path = $request->file('cover_image')->store('covers', 'public');
+            $event->cover_image_url = '/storage/' . $path;
+            $event->save();
+
+            return response()->json([
+                'message' => 'Cover image uploaded successfully',
+                'cover_image_url' => $event->cover_image_url
+            ]);
+        }
+
+        return response()->json(['message' => 'No image uploaded'], 400);
     }
 
     public function destroy(Event $event)
